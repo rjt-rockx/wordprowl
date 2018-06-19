@@ -1,0 +1,16 @@
+{
+  "name": "wordprowl",
+  "version": "1.0.0",
+  "description": "A program to generate a word search puzzle automatically",
+  "main": "index.js",
+  "dependencies": {
+    "datamuse": "^1.0.5",
+    "random-word": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node puzzlegen.js"
+  },
+  "author": "rjt-rockx",
+  "license": "MIT"
+}
