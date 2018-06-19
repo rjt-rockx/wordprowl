@@ -1,6 +1,6 @@
 var datamuse = require('datamuse');
 var randomWord = require('random-word');
-var wordprowl = require('./main.js');
+var wordprowl = require('./wordprowl.js');
 
 var uniqueArray = function (arrArg) {
     return arrArg.filter(function (elem, pos, arr) {
