@@ -1,3 +1,4 @@
+//jshint esversion:6
 var datamuse = require('datamuse');
 var randomWord = require('random-word');
 var wordprowl = require('./wordprowl.js');

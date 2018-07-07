@@ -1,3 +1,4 @@
+//jshint esversion:6
 var letters = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
 var allOrientations = ['horizontal', 'horizontalBack', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp', 'diagonalBack', 'diagonalUpBack'];
 
