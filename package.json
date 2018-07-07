@@ -5,12 +5,28 @@
   "main": "index.js",
   "dependencies": {
     "datamuse": "^1.0.5",
-    "random-word": "^2.0.0"
+    "express": "^4.16.3",
+    "random-word": "^2.0.0",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node puzzlegen.js"
+    "test": "node puzzlegen.js",
+    "start": "node server.js"
   },
   "author": "rjt-rockx",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjt-rockx/wordprowl.git"
+  },
+  "keywords": [
+    "word-search",
+    "puzzle",
+    "nodejs"
+  ],
+  "bugs": {
+    "url": "https://github.com/rjt-rockx/wordprowl/issues"
+  },
+  "homepage": "https://github.com/rjt-rockx/wordprowl#readme"
 }

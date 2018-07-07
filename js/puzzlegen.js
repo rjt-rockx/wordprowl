@@ -26,7 +26,8 @@ var getWords = async function (category) {
         })
         .catch((err) => console.log(err)));
     return words;
-};
+}
+
 var createPuzzle = async function () {
     let words = [];
     let category;
@@ -41,10 +42,16 @@ var createPuzzle = async function () {
         maxAttempts: 5,
         orientations: ['horizontal', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp']
     });
-    console.log("\nWordprowl - " + category + "\n");
-    wordprowl.printPuzzle(puzzle);
-    console.log("\nWords:\n" + words.join("\n"));
-    // console.log(puzzle);
-    // console.log(wordprowl.solvePuzzle(puzzle, words));
-};
-createPuzzle();
+    let solution = wordprowl.solvePuzzle(puzzle, words);
+    puzzle.forEach((array) => array.join(" "));
+    puzzle = puzzle.join("<br>");
+    words = words.join("<br>");
+    return {
+        category: category,
+        puzzle: puzzle,
+        words: words,
+        solution: solution
+    };
+}
+
+exports.createPuzzle = createPuzzle;

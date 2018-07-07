@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wordprowl</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <center>
+        <h1>Wordprowl</h1>
+        <div id="category"></div>
+        <br>
+        <p id="grid"></p>
+        <br>
+        <div id="words"></div>
+        <br>
+        <button onclick="getNewPuzzle()">New Puzzle</button>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect();
+
+            function getNewPuzzle() {
+                socket.emit('getNewPuzzle');
+            }
+
+            socket.on('createPuzzle', function (category, puzzle, words) {
+                document.getElementById("category").innerHTML = category.toString();
+                document.getElementById("grid").innerHTML = puzzle;
+                document.getElementById("words").innerHTML = words.toString();
+            });
+        </script>
+    </center>
+</body>
+
+</html>
