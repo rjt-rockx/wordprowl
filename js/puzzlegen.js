@@ -43,7 +43,7 @@ var createPuzzle = async function () {
         orientations: ['horizontal', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp']
     });
     let solution = wordprowl.solvePuzzle(puzzle, words);
-    puzzle.forEach((array) => array.join(" "));
+    puzzle.forEach((array, index, puzzle) => puzzle[index] = puzzle[index].join(" "));
     puzzle = puzzle.join("<br>");
     words = words.join("<br>");
     return {
