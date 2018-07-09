@@ -2,35 +2,131 @@
 <html>
 
 <head>
-    <title>Wordprowl</title>
-    <meta charset="utf-8">
+  <title>Wordprowl</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet">
+  <style media="screen">
+    :root {
+      --grid-size: 25;
+    }
+
+    body {
+      font-family: "Roboto Slab", serif;
+      padding: 0;
+      margin: 0;
+      background-color: #eaeaea;
+    }
+
+    .wrapper {
+      box-sizing: border-box;
+      width: 100%;
+      margin-bottom: 56px;
+      padding: 0 8px;
+    }
+
+    .toolbar {
+      display: flex;
+      box-sizing: border-box;
+      position: fixed;
+      padding: 0 8px;
+      bottom: 0;
+      width: 100%;
+      height: 56px;
+      align-items: center;
+      justify-content: space-between;
+
+      background-color: #ffffff;
+
+      box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .button {
+      display: inline-block;
+      border-radius: 2px;
+      border: none;
+      height: 36px;
+      min-width: 36px;
+
+      background-color: #e04050;
+      color: white;
+
+      font-family: inherit;
+      font-weight: 400;
+      text-transform: uppercase;
+
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), inset 0 -1px 0 rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .button:hover {
+      cursor: pointer;
+    }
+
+    .button:active {
+      outline: none;
+      background-color: #B33340;
+    }
+
+    #grid {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(var(--grid-size), auto);
+      grid-template-rows: repeat(var(--grid-size), auto);
+    }
+
+    .grid__item {
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-    <center>
-        <h1>Wordprowl</h1>
-        <div id="category"></div>
-        <br>
-        <p id="grid"></p>
-        <br>
-        <div id="words"></div>
-        <br>
-        <button onclick="getNewPuzzle()">New Puzzle</button>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io.connect();
+  <div class="wrapper">
+    <div id="category"></div>
+    <br>
+    <p id="grid"></p>
+    <br>
+    <div id="words"></div>
+    <br>
+  </div>
+  <!--unnecessarily complicated toolbar-->
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <div class="toolbar__title">
+        Wordprowl
+      </div>
+    </div>
+    <div class="toolbar__right">
+      <button class="button" onclick="">?</button>
+      <button class="button" onclick="getNewPuzzle()">New Puzzle</button>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect();
 
-            function getNewPuzzle() {
-                socket.emit('getNewPuzzle');
-            }
+    function getNewPuzzle() {
+      socket.emit('getNewPuzzle');
+    }
 
-            socket.on('createPuzzle', function (category, puzzle, words) {
-                document.getElementById("category").innerHTML = category.toString();
-                document.getElementById("grid").innerHTML = puzzle;
-                document.getElementById("words").innerHTML = words.toString();
-            });
-        </script>
-    </center>
+    socket.on('createPuzzle', function(category, puzzle, words) {
+      var gridSize = puzzle.length;
+      puzzle.forEach((row, r, puzzle) => {
+        row.forEach((col, c, row) => {
+          row[c] = "<div class=\"grid__item\">" + row[c] + "</div>";
+        });
+        puzzle[r] = puzzle[r].join("");
+      });
+      puzzle = puzzle.join("");
+
+      words = words.join("<br>")
+
+      document.getElementById("category").innerHTML = category.toString();
+      document.getElementById("grid").innerHTML = puzzle;
+      document.getElementById("words").innerHTML = words.toString();
+      document.documentElement.style.setProperty("--grid-size", gridSize);
+    });
+  </script>
 </body>
 
 </html>
