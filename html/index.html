@@ -26,7 +26,9 @@
 
             socket.on('createPuzzle', function (category, puzzle, words) {
                 document.getElementById("category").innerHTML = category.toString();
+                puzzle = puzzle.join("<br>");
                 document.getElementById("grid").innerHTML = puzzle;
+                words = words.join("<br>");
                 document.getElementById("words").innerHTML = words.toString();
             });
         </script>

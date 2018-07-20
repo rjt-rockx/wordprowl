@@ -35,6 +35,7 @@ var createPuzzle = async function () {
         category = randomWord().toUpperCase();
         words = await Promise.resolve(getWords(category));
     }
+
     let puzzle = wordprowl.newPuzzle(words, {
         preferOverlap: true,
         maxGridGrowth: 25,
@@ -42,10 +43,9 @@ var createPuzzle = async function () {
         maxAttempts: 5,
         orientations: ['horizontal', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp']
     });
+
     let solution = wordprowl.solvePuzzle(puzzle, words);
-    puzzle.forEach((array, index, puzzle) => puzzle[index] = puzzle[index].join(" "));
-    puzzle = puzzle.join("<br>");
-    words = words.join("<br>");
+
     return {
         category: category,
         puzzle: puzzle,
