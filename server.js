@@ -13,4 +13,4 @@ let makePuzzle = async function () {
 
 io.on('connection', (client) => client.on('getNewPuzzle', makePuzzle));
 
-server.listen(3000, console.log('Wordprowl\nListening on port 3000'));
+server.listen(4280, console.log('Wordprowl\nListening on port 3000'));
