@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>Wordprowl</title>
-    <meta charset="utf-8">
-</head>
+    <head>
+        <title>Wordprowl</title>
+        <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+        <style>
+            .ubuntuMono {
+                font-family: 'Ubuntu Mono', monospace;
+            }
 
-<body>
-    <center>
-        <h1>Wordprowl</h1>
-        <div id="category"></div>
-        <br>
-        <p id="grid"></p>
-        <br>
-        <div id="words"></div>
-        <br>
-        <button onclick="getNewPuzzle()">New Puzzle</button>
+            .gridLetter {
+                margin: 8px;
+                align-content: center;
+                display: inline;
+            }
+
+            .gridSeparator {
+                display: block;
+                height: 8px;
+                padding: 0px;
+            }
+        </style>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             var socket = io.connect();
-
             function getNewPuzzle() {
                 socket.emit('getNewPuzzle');
             }
+            let wrapLetter = (letter) => `<div class="gridLetter">${letter}</div>`;
 
-            socket.on('createPuzzle', function (category, puzzle, words) {
-                document.getElementById("category").innerHTML = category.toString();
-                puzzle = puzzle.join("<br>");
-                document.getElementById("grid").innerHTML = puzzle;
-                words = words.join("<br>");
-                document.getElementById("words").innerHTML = words.toString();
+            socket.on('createPuzzle', function (data) {
+                document.getElementById("category").innerHTML = `<strong>${data.category}</strong> (${data.size})`;
+                document.getElementById("grid").innerHTML = data.puzzle.map(element => element.map(wrapLetter).join("")).join('<div class="gridSeparator"></div>');
+                document.getElementById("words").innerHTML = data.words.sort().join('<br>');
             });
         </script>
-    </center>
-</body>
+    </head>
+
+    <body class="ubuntuMono">
+        <center>
+            <h1>Wordprowl</h1>
+            <div id="category"></div>
+            <br>
+            <p id="grid"></p>
+            <br>
+            <div id="words"></div>
+            <br>
+            <button onclick="getNewPuzzle()">New Puzzle</button>
+        </center>
+    </body>
 
 </html>

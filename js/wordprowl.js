@@ -1,10 +1,9 @@
-//jshint esversion:6
-var letters = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
-var allOrientations = ['horizontal', 'horizontalBack', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp', 'diagonalBack', 'diagonalUpBack'];
+const letters = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
+const allOrientations = ['horizontal', 'horizontalBack', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp', 'diagonalBack', 'diagonalUpBack'];
 
 // The definition of the orientation, calculates the next square given a
 // starting square (x,y) and distance (i) from that square.
-var orientations = {
+const orientations = {
     horizontal: function (x, y, i) {
         return {
             x: x + i,
@@ -59,11 +58,11 @@ var orientations = {
  * the height (h) and width (w) of the puzzle, and the length of the word (l).
  * Returns true if the word will fit starting at the square provided using
  * the specified orientation.
- *   
+ *
  */
-var checkOrientations = {
+const checkOrientations = {
     /**
-     * Determines if a horizontal orientation is possible. Returns true if the word will fit. 
+     * Determines if a horizontal orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -75,7 +74,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a horizontal-backwards orientation is possible. Returns true if the word will fit. 
+     * Determines if a horizontal-backwards orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -87,7 +86,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a vertical orientation is possible. Returns true if the word will fit. 
+     * Determines if a vertical orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -99,7 +98,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a vertical-upwards orientation is possible. Returns true if the word will fit. 
+     * Determines if a vertical-upwards orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -111,7 +110,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a diagonal orientation is possible. Returns true if the word will fit. 
+     * Determines if a diagonal orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -123,7 +122,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a diagonal-backwards orientation is possible. Returns true if the word will fit. 
+     * Determines if a diagonal-backwards orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -135,7 +134,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a diagonal-upwards orientation is possible. Returns true if the word will fit. 
+     * Determines if a diagonal-upwards orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -147,7 +146,7 @@ var checkOrientations = {
     },
 
     /**
-     * Determines if a diagonal-upwards-backwards orientation is possible. Returns true if the word will fit. 
+     * Determines if a diagonal-upwards-backwards orientation is possible. Returns true if the word will fit.
      * @param {number} x X offset of starting square
      * @param {number} y Y offset of starting square
      * @param {number} h Height of the puzzle
@@ -159,9 +158,9 @@ var checkOrientations = {
     }
 };
 
-// Determines the next possible valid square given the square (x,y) was invalid and a word length of (l). 
+// Determines the next possible valid square given the square (x,y) was invalid and a word length of (l).
 // This greatly reduces the number of squares that must be checked. Returning {x: x+1, y: y} will always work but will not be optimal.
-var skipOrientations = {
+const skipOrientations = {
     horizontal: function (x, y, l) {
         return {
             x: 0,
@@ -228,9 +227,9 @@ var skipOrientations = {
  * @param {number} options.maxGridGrowth: Maximum growth of the grid size
  * @param {boolean} options.preferOverlap: Prefer overlapping of words or not
  */
-var fillPuzzle = function (words, options) {
+const fillPuzzle = function (words, options) {
 
-    var puzzle = [],
+    let puzzle = [],
         i, j, len;
 
     // initialize the puzzle with blanks
@@ -264,17 +263,17 @@ var fillPuzzle = function (words, options) {
  * @param {[Options]} options: The options to use when filling the puzzle
  * @param {String} word: The word to fit into the puzzle.
  */
-var placeWordInPuzzle = function (puzzle, options, word) {
+const placeWordInPuzzle = function (puzzle, options, word) {
 
     // find all of the best locations where this word would fit
-    var locations = findBestLocations(puzzle, options, word);
+    let locations = findBestLocations(puzzle, options, word);
 
     if (locations.length === 0) {
         return false;
     }
 
     // select a location at random and place the word there
-    var sel = locations[Math.floor(Math.random() * locations.length)];
+    let sel = locations[Math.floor(Math.random() * locations.length)];
     placeWord(puzzle, word, sel.x, sel.y, orientations[sel.orientation]);
 
     return true;
@@ -293,18 +292,18 @@ var placeWordInPuzzle = function (puzzle, options, word) {
  * @param {[Options]} options: The options to use when filling the puzzle
  * @param {String} word: The word to fit into the puzzle.
  */
-var findBestLocations = function (puzzle, options, word) {
+const findBestLocations = function (puzzle, options, word) {
 
-    var locations = [],
+    let locations = [],
         height = options.height,
         width = options.width,
         wordLength = word.length,
         maxOverlap = 0; // we'll start looking at overlap = 0
 
     // loop through all of the possible orientations at this position
-    for (var k = 0, len = options.orientations.length; k < len; k++) {
+    for (let k = 0, len = options.orientations.length; k < len; k++) {
 
-        var orientation = options.orientations[k],
+        let orientation = options.orientations[k],
             check = checkOrientations[orientation],
             next = orientations[orientation],
             skipTo = skipOrientations[orientation],
@@ -318,7 +317,7 @@ var findBestLocations = function (puzzle, options, word) {
             if (check(x, y, height, width, wordLength)) {
 
                 // determine if the word fits at the current position
-                var overlap = calcOverlap(word, puzzle, x, y, next);
+                let overlap = calcOverlap(word, puzzle, x, y, next);
 
                 // if the overlap was bigger than previous overlaps that we've seen
                 if (overlap >= maxOverlap || (!options.preferOverlap && overlap > -1)) {
@@ -340,7 +339,7 @@ var findBestLocations = function (puzzle, options, word) {
                 // if current cell is invalid, then skip to the next cell where
                 // this orientation is possible. this greatly reduces the number
                 // of checks that we have to do overall
-                var nextPossible = skipTo(x, y, wordLength);
+                let nextPossible = skipTo(x, y, wordLength);
                 x = nextPossible.x;
                 y = nextPossible.y;
             }
@@ -368,13 +367,13 @@ var findBestLocations = function (puzzle, options, word) {
  * @param {int} y: The y position to check
  * @param {function} fnGetSquare: Function that returns the next square
  */
-var calcOverlap = function (word, puzzle, x, y, fnGetSquare) {
-    var overlap = 0;
+const calcOverlap = function (word, puzzle, x, y, fnGetSquare) {
+    let overlap = 0;
 
     // traverse the squares to determine if the word fits
-    for (var i = 0, len = word.length; i < len; i++) {
+    for (let i = 0, len = word.length; i < len; i++) {
 
-        var next = fnGetSquare(x, y, i),
+        let next = fnGetSquare(x, y, i),
             square = puzzle[next.y][next.x];
 
         // if the puzzle square already contains the letter we
@@ -404,9 +403,9 @@ var calcOverlap = function (word, puzzle, x, y, fnGetSquare) {
  * @param {[Location]} locations: The set of locations to prune
  * @param {int} overlap: The required level of overlap
  */
-var pruneLocations = function (locations, overlap) {
-    var pruned = [];
-    for (var i = 0, len = locations.length; i < len; i++) {
+const pruneLocations = function (locations, overlap) {
+    let pruned = [];
+    for (let i = 0, len = locations.length; i < len; i++) {
         if (locations[i].overlap >= overlap) {
             pruned.push(locations[i]);
         }
@@ -423,16 +422,16 @@ var pruneLocations = function (locations, overlap) {
  * @param {int} y: The y position to check
  * @param {function} fnGetSquare: Function that returns the next square
  */
-var placeWord = function (puzzle, word, x, y, fnGetSquare) {
-    for (var i = 0, len = word.length; i < len; i++) {
-        var next = fnGetSquare(x, y, i);
+const placeWord = function (puzzle, word, x, y, fnGetSquare) {
+    for (let i = 0, len = word.length; i < len; i++) {
+        let next = fnGetSquare(x, y, i);
         puzzle[next.y][next.x] = word[i];
     }
 };
 
 
 /**
- * Generates a new puzzle and returns the puzzle that was created. 
+ * Generates a new puzzle and returns the puzzle that was created.
  *
  * @param {[String]} words: The list of words to fit into the puzzle
  * @param {Object} settings: Options to use when filling the puzzle
@@ -445,11 +444,11 @@ var placeWord = function (puzzle, word, x, y, fnGetSquare) {
  * @param {number} settings.maxGridGrowth: Maximum growth of the grid size
  * @param {boolean} settings.preferOverlap: Prefer overlapping of words
  */
-var newPuzzle = function (words, settings) {
+const newPuzzle = function (words, settings) {
     if (!words.length) {
         throw new Error('Zero words provided');
     }
-    var wordList, puzzle, attempts = 0,
+    let wordList, puzzle, attempts = 0,
         gridGrowths = 0,
         opts = settings || {};
 
@@ -458,8 +457,8 @@ var newPuzzle = function (words, settings) {
     wordList = words.slice(0).sort();
 
     // initialize the options
-    var maxWordLength = wordList[0].length;
-    var options = {
+    let maxWordLength = wordList[0].length;
+    let options = {
         height: opts.height || maxWordLength,
         width: opts.width || maxWordLength,
         orientations: opts.orientations || allOrientations,
@@ -492,7 +491,7 @@ var newPuzzle = function (words, settings) {
 
     // fill in empty spaces with random letters
     if (options.fillBlanks) {
-        var lettersToAdd, fillingBlanksCount = 0,
+        let lettersToAdd, fillingBlanksCount = 0,
             extraLetterGenerator;
         if (typeof options.fillBlanks === 'function') {
             extraLetterGenerator = options.fillBlanks;
@@ -502,7 +501,7 @@ var newPuzzle = function (words, settings) {
         } else {
             extraLetterGenerator = () => letters[Math.floor(Math.random() * letters.length)];
         }
-        var extraLettersCount = fillBlanks({
+        let extraLettersCount = fillBlanks({
             puzzle,
             extraLetterGenerator: extraLetterGenerator
         });
@@ -512,7 +511,7 @@ var newPuzzle = function (words, settings) {
         if (lettersToAdd && fillingBlanksCount && !options.allowExtraBlanks) {
             throw new Error(`${fillingBlanksCount} extra letters were missing to fill the grid`);
         }
-        var gridFillPercent = 100 * (1 - extraLettersCount / (options.width * options.height));
+        let gridFillPercent = 100 * (1 - extraLettersCount / (options.width * options.height));
         // console.log(`Blanks filled with ${extraLettersCount} random letters - Final grid is filled at ${gridFillPercent.toFixed(0)}%`);
     }
 
@@ -525,23 +524,23 @@ var newPuzzle = function (words, settings) {
  * @param {options} settings: The options to use for this puzzle.
  * Same as `newPuzzle` + allowedMissingWords
  */
-var newPuzzleLax = function (words, opts) {
+const newPuzzleLax = function (words, opts) {
     try {
         return newPuzzle(words, opts);
     } catch (e) {
         if (!opts.allowedMissingWords) {
             throw e;
         }
-        var opts = Object.assign({}, opts); // shallow copy
+        let opts = Object.assign({}, opts); // shallow copy
         opts.allowedMissingWords--;
-        for (var i = 0; i < words.length; i++) {
-            var wordList = words.slice(0);
+        for (let i = 0; i < words.length; i++) {
+            let wordList = words.slice(0);
             wordList.splice(i, 1);
             try {
-                var puzzle = newPuzzleLax(wordList, opts);
+                let puzzle = newPuzzleLax(wordList, opts);
                 // console.log(`Solution found without word "${words[i]}"`);
                 return puzzle;
-            } catch (e) {} // continue if error
+            } catch (e) { } // continue if error
         }
         throw e;
     }
@@ -553,14 +552,14 @@ var newPuzzleLax = function (words, opts) {
  * @param {[[String]]} puzzle: The current state of the puzzle
  * @api public
  */
-var fillBlanks = function ({
+const fillBlanks = function ({
     puzzle,
     extraLetterGenerator
 }) {
-    var extraLettersCount = 0;
-    for (var i = 0, height = puzzle.length; i < height; i++) {
-        var row = puzzle[i];
-        for (var j = 0, width = row.length; j < width; j++) {
+    let extraLettersCount = 0;
+    for (let i = 0, height = puzzle.length; i < height; i++) {
+        let row = puzzle[i];
+        for (let j = 0, width = row.length; j < width; j++) {
             if (!puzzle[i][j]) {
                 puzzle[i][j] = extraLetterGenerator();
                 extraLettersCount++;
@@ -585,18 +584,18 @@ var fillBlanks = function ({
  * @param {[[String]]} puzzle The current state of the puzzle
  * @param {[String]} words The list of words to find
  */
-var solvePuzzle = function (puzzle, words) {
-    var options = {
-            height: puzzle.length,
-            width: puzzle[0].length,
-            orientations: allOrientations,
-            preferOverlap: true
-        },
+const solvePuzzle = function (puzzle, words) {
+    let options = {
+        height: puzzle.length,
+        width: puzzle[0].length,
+        orientations: allOrientations,
+        preferOverlap: true
+    },
         found = [],
         notFound = [];
 
-    for (var i = 0, len = words.length; i < len; i++) {
-        var word = words[i],
+    for (let i = 0, len = words.length; i < len; i++) {
+        let word = words[i],
             locations = findBestLocations(puzzle, options, word);
 
         if (locations.length > 0 && locations[0].overlap === word.length) {
@@ -620,17 +619,15 @@ var solvePuzzle = function (puzzle, words) {
  * @param {[[String]]} puzzle: The current state of the puzzle
  * @api public
  */
-var printPuzzle = function (puzzle) {
-    var puzzleString = '';
-    for (var i = 0, height = puzzle.length; i < height; i++) {
-        var row = puzzle[i];
-        for (var j = 0, width = row.length; j < width; j++) {
+const printPuzzle = function (puzzle) {
+    let puzzleString = '';
+    for (let i = 0, height = puzzle.length; i < height; i++) {
+        let row = puzzle[i];
+        for (let j = 0, width = row.length; j < width; j++) {
             puzzleString += (row[j] === '' ? ' ' : row[j]) + ' ';
         }
         puzzleString += '\n';
     }
-
-    console.log(puzzleString);
     return puzzleString;
 };
 

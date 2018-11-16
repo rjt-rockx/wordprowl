@@ -1,39 +1,29 @@
-//jshint esversion:6
-var datamuse = require('datamuse');
-var randomWord = require('random-word');
-var wordprowl = require('./wordprowl.js');
+const datamuse = require('datamuse');
+const randomWord = require('random-word');
+const wordprowl = require('./wordprowl.js');
+const { findBestMatch } = require('string-similarity');
 
-var uniqueArray = function (arrArg) {
-    return arrArg.filter(function (elem, pos, arr) {
-        return arr.indexOf(elem) == pos;
+let uniqueArray = (arrArg) => arrArg.filter((elem, pos, arr) => arr.indexOf(elem) == pos);
+
+let getWords = async function (category) {
+    let jsonData = await datamuse.words({ ml: category });
+    let words = jsonData.sort((a, b) => a.score > b.score).map(entry => entry.word.toUpperCase());
+    let filteredWords = uniqueArray(words.filter(word => !(word.includes(' ') || word.includes('-'))));
+    let similarWords = [];
+    filteredWords.map((word, index, arr) => {
+        findBestMatch(word, arr).ratings.sort((a, b) => a.rating < b.rating).filter(entry => entry.rating > 0.7 && entry.target !== word).map(entry => similarWords.push(entry.target));
     });
+    filteredWords = filteredWords.filter(word => !similarWords.includes(word));
+    let logString = `${filteredWords.length > 0 ? filteredWords.length.toString().padStart(2, '0') : 'No'} words found for category ${category}.`;
+    console.log(logString.padEnd(50) + `[${similarWords.length.toString().padStart(2, '0')} filtered]`);
+    return filteredWords.length > 10 ? filteredWords.slice(filteredWords.length - 10, filteredWords.length) : filteredWords;
 };
 
-var getWords = async function (category) {
-    let words = await Promise.resolve(datamuse.words({
-            "ml": category
-        })
-        .then((json) => {
-            let wordarray = [];
-            json.sort((a, b) => {
-                return a.score > b.score;
-            });
-            json.forEach((entry) => wordarray.push(entry.word.toUpperCase()));
-            wordarray = uniqueArray(wordarray.filter(word => !word.includes(' ')));
-            // console.log(category);
-            // console.log(wordarray);
-            return wordarray.length > 10 ? wordarray.slice(wordarray.length - 10, wordarray.length) : wordarray;
-        })
-        .catch((err) => console.log(err)));
-    return words;
-}
-
-var createPuzzle = async function () {
-    let words = [];
-    let category;
+let createPuzzle = async function () {
+    let words = [], category;
     while (words.length < 10) {
         category = randomWord().toUpperCase();
-        words = await Promise.resolve(getWords(category));
+        words = await getWords(category);
     }
 
     let puzzle = wordprowl.newPuzzle(words, {
@@ -45,13 +35,15 @@ var createPuzzle = async function () {
     });
 
     let solution = wordprowl.solvePuzzle(puzzle, words);
+    let size = puzzle[0].length.toString();
 
     return {
         category: category,
         puzzle: puzzle,
         words: words,
-        solution: solution
+        solution: solution,
+        size: `${size}x${size}`
     };
-}
+};
 
 exports.createPuzzle = createPuzzle;
