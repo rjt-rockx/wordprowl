@@ -4,7 +4,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const puzzlegen = require('./js/puzzlegen.js');
 
-app.get('/wordprowl', (req, res) => res.sendFile(__dirname + '/html/index.html'));
+app.get('/', (req, res) => res.sendFile(__dirname + '/html/index.html'));
 
 let makePuzzle = async function () {
     let data = await puzzlegen.createPuzzle();
@@ -13,4 +13,4 @@ let makePuzzle = async function () {
 
 io.on('connection', (client) => client.on('getNewPuzzle', makePuzzle));
 
-server.listen(4280, console.log('Wordprowl\nListening on port 3000'));
+server.listen(4280, console.log('Wordprowl\nListening on port 4280'));
