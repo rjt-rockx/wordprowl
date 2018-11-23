@@ -1,28 +1,13 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <title>Wordprowl</title>
         <meta charset="utf-8">
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
-        <style>
-            .ubuntuMono {
-                font-family: 'Ubuntu Mono', monospace;
-            }
 
-            .gridLetter {
-                margin: 8px;
-                align-content: center;
-                display: inline;
-            }
+        <link href="../css/index.css" rel="stylesheet">
 
-            .gridSeparator {
-                display: block;
-                height: 8px;
-                padding: 0px;
-            }
-        </style>
         <script src="/socket.io/socket.io.js"></script>
+        <!--
         <script>
             var socket = io.connect();
             function getNewPuzzle() {
@@ -36,19 +21,47 @@
                 document.getElementById("words").innerHTML = data.words.sort().join('<br>');
             });
         </script>
+        -->
     </head>
+    <body>
+        <div class="wrapper">
+            <h1>Wordfind</h1>
+            <div class="layout">
+                <div class="puzzle__wrapper">
+                    <div class="puzzle">
+                        <div id="puzzle__grid" class="puzzle__grid">
+                            <!--
+                            <div class="puzzle__cell">
+                                <span>A</span>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
 
-    <body class="ubuntuMono">
-        <center>
-            <h1>Wordprowl</h1>
-            <div id="category"></div>
-            <br>
-            <p id="grid"></p>
-            <br>
-            <div id="words"></div>
-            <br>
-            <button onclick="getNewPuzzle()">New Puzzle</button>
-        </center>
+                <div class="layout__divider">
+                </div>
+                
+                <div class="word-list__wrapper">
+                    <div class="word-list">
+                        <span class="word-list__title">
+                            <h1>FooBar</h1>
+                        </span>               
+                        <ul class="word-list__list">
+                            <li class="word-list__list-item">Lorem</li>
+                            <li class="word-list__list-item">Ipsum</li>
+                            <li class="word-list__list-item">Dolor</li>
+                            <li class="word-list__list-item">Sit</li>
+                            <li class="word-list__list-item">Amet</li>
+                            <li class="word-list__list-item">Consectetur</li>
+                            <li class="word-list__list-item">Adipiscing</li>
+                            <li class="word-list__list-item">Elit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../js/index.js"></script>
     </body>
 
 </html>
