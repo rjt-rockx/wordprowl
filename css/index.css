@@ -44,6 +44,8 @@ body {
 .puzzle__title {
     padding: 0 8px; 
     line-height: 48px;
+
+    text-transform: capitalize;
 }
 
 .puzzle__title h3 {
@@ -123,5 +125,7 @@ body {
 }
 
 .word__list li {
+
     text-align: center;
+    text-transform: capitalize;
 }

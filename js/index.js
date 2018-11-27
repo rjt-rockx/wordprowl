@@ -8,7 +8,7 @@ socket.on('createPuzzle', function (data) {
     console.log(data);
 
     let puzzleTitle = document.getElementById('puzzle__title');
-    puzzleTitle.innerHTML = '<h3>' + data.category + '</h3>';
+    puzzleTitle.innerHTML = '<h3>' + data.category.toLowerCase() + '</h3>';
 
     document.documentElement.style.setProperty('--puzzle__grid-size', data.size);
 
@@ -33,7 +33,7 @@ socket.on('createPuzzle', function (data) {
     wordList.innerHTML = '';
     for(let i = 0; i < words.length; i++) {
         let wordListItem = document.createElement('li');
-        wordListItem.innerHTML = words[i];
+        wordListItem.innerHTML = words[i].toLowerCase();
 
         wordList.appendChild(wordListItem);
     }
