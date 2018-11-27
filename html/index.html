@@ -8,21 +8,6 @@
         <link href="../css/index.css" rel="stylesheet">
 
         <script src="/socket.io/socket.io.js"></script>
-        <!--
-        <script>
-            var socket = io.connect();
-            function getNewPuzzle() {
-                socket.emit('getNewPuzzle');
-            }
-            let wrapLetter = (letter) => `<div class="gridLetter">${letter}</div>`;
-
-            socket.on('createPuzzle', function (data) {
-                document.getElementById("category").innerHTML = `<strong>${data.category}</strong> (${data.size})`;
-                document.getElementById("grid").innerHTML = data.puzzle.map(element => element.map(wrapLetter).join("")).join('<div class="gridSeparator"></div>');
-                document.getElementById("words").innerHTML = data.words.sort().join('<br>');
-            });
-        </script>
-        -->
     </head>
     <body>
         <div id="wrapper">
@@ -31,8 +16,8 @@
             </div>
             <div class="puzzle">
                 <div class="puzzle__header">
-                    <div class="puzzle__title"><h3>FooBar</h3></div>
-                    <button class="button button--new-puzzle">
+                    <div id= "puzzle__title" class="puzzle__title"><h3>FooBar</h3></div>
+                    <button class="button button--new-puzzle" onclick="getNewPuzzle()">
                         New Puzzle 
                     </button>
                 </div>
@@ -42,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <ul class="word__list">
+            <ul id="word__list" class="word__list">
                 <li>Lorem</li>
                 <li>Ipsum</li>
                 <li>Dolor</li>

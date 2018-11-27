@@ -42,7 +42,7 @@ let createPuzzle = async function () {
         puzzle: puzzle,
         words: words,
         solution: solution,
-        size: `${size}x${size}`
+        size: size 
     };
 };
 
