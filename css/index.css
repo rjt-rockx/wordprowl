@@ -1,132 +1,127 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700');
 
 :root {
-    --puzzle-size: 10
+    --puzzle__grid-size: 10
 }
 
 body {
-    background-color: lightgrey;
+    margin: 0;
+    padding: 0;
+    
+    font-family: 'Ubuntu Mono', monospace;
+
+    background-color: white;
     color: rgba(0, 0, 0, 0.87);
-    font-family: 'Ubuntu Mono', sans-serif;
 }
 
-.wrapper {
-    max-width: 960px;
+#wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 480px;
 
+    margin: none;
     margin-left: auto;
     margin-right: auto;
 
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
-.layout {
-    display: flex;
-    flex-direction: row;
-}
-
-.puzzle__wrapper {
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 0;
+    padding: 0 16px;
 }
 
 .puzzle {
+    background-color: lightGrey;
+    border-radius: 4px;
+
+    overflow: hidden;
+    
+    margin: 0 0;
+}
+
+.puzzle__header {
+    display: flex;
+    justify-content: space-between; 
+    background-color: rgba(0, 0, 0, 0.20);
+}
+
+.puzzle__title {
+    padding: 0 8px; 
+    line-height: 48px;
+}
+
+.puzzle__title h3 {
+    margin: 0;
+}
+
+.button {
+    display: inline-block;
+    height: 32px;
+
+    margin: 8px;
+
+    border: none;
+    border-radius: 4px;
+
+    padding 0 8px;
+
+    font-family: inherit;
+    font-weight: bold;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.button:active {
+    padding: 0 8px;
+}
+
+.button--new-puzzle {
+    color: white;
+    background-color: #035891;
+}
+
+.button--new-puzzle:active {
+    background-color: #043769;
+}
+
+.puzzle__grid-container {
     position: relative;
+
     width: 100%;
+    
     padding-top: 100%;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;}
+}
 
 .puzzle__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--puzzle__grid-size), 1fr);
+
     position: absolute;
     top: 0;
     left: 0;
 
-    display: grid;
-    overflow: hidden;
-
-    height: 100%;
     width: 100%;
-    border: 2px solid grey;
-    border-radius: 4px;
-
-    /*grid stuff*/
-    grid-template-columns: repeat(var(--puzzle-size), 1fr);
-    grid-template-rows: repeat(var(--puzzle-size), 1fr);
+    height: 100%;
 }
 
-.puzzle__cell {
+.puzzle__grid-cell {
     position: relative;
     font-weight: bold;
 }
 
-.puzzle__cell:hover {
-    background-color: rgb(0, 0, 0, 0.20);
-}
-
-.puzzle__cell span {
+.puzzle__grid-cell span {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.puzzle__cell--selected-top {
-    border: 2px solid green;
-    border-top: none;
+.word__list {
+    list-style-type: none;
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    
+    padding-left: 0;
 }
 
-.puzzle__cell--selected-right {
-    border: 2px solid green;
-    border-right: none;
-}
-
-.puzzle__cell--selected-bottom {
-    border: 2px solid green;
-    border-bottom: none;
-}
-
-.puzzle__cell--selected-left {
-    border: 2px solid green;
-    border-left: none;
-}
-
-.puzzle__cell--selected-right-left {
-    border: 2px solid green;
-    border-right: none;
-    border-left: none;
-}
-
-.puzzle__cell--selected-top-bottom {
-    border: 2px solid green;
-    border-top: none;
-    border-bottom: none;
-}
-
-.layout__divider {
-    margin: 0 24px;
-    border: 1px solid grey;
-}
-
-.word-list__wrapper {
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 0;
-}
-
-.word-list {
-}
-
-@media only screen and (max-width: 600px) {
-    .layout {
-        flex-direction: column;
-    }
-    .layout__divider {
-        display: none;
-    }
+.word__list li {
+    text-align: center;
 }

@@ -3,6 +3,7 @@
     <head>
         <title>Wordprowl</title>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="../css/index.css" rel="stylesheet">
 
@@ -24,44 +25,35 @@
         -->
     </head>
     <body>
-        <div class="wrapper">
-            <h1>Wordfind</h1>
-            <div class="layout">
-                <div class="puzzle__wrapper">
-                    <div class="puzzle">
-                        <div id="puzzle__grid" class="puzzle__grid">
-                            <!--
-                            <div class="puzzle__cell">
-                                <span>A</span>
-                            </div>
-                            -->
-                        </div>
-                    </div>
+        <div id="wrapper">
+            <div class="header">
+                <div class="header__title"><h1>Wordfind</h1></div>
+            </div>
+            <div class="puzzle">
+                <div class="puzzle__header">
+                    <div class="puzzle__title"><h3>FooBar</h3></div>
+                    <button class="button button--new-puzzle">
+                        New Puzzle 
+                    </button>
                 </div>
-
-                <div class="layout__divider">
-                </div>
-                
-                <div class="word-list__wrapper">
-                    <div class="word-list">
-                        <span class="word-list__title">
-                            <h1>FooBar</h1>
-                        </span>               
-                        <ul class="word-list__list">
-                            <li class="word-list__list-item">Lorem</li>
-                            <li class="word-list__list-item">Ipsum</li>
-                            <li class="word-list__list-item">Dolor</li>
-                            <li class="word-list__list-item">Sit</li>
-                            <li class="word-list__list-item">Amet</li>
-                            <li class="word-list__list-item">Consectetur</li>
-                            <li class="word-list__list-item">Adipiscing</li>
-                            <li class="word-list__list-item">Elit</li>
-                        </ul>
+                <div class="puzzle__grid-container">
+                    <div id="puzzle__grid" class="puzzle__grid">
+                        
                     </div>
                 </div>
             </div>
+            <ul class="word__list">
+                <li>Lorem</li>
+                <li>Ipsum</li>
+                <li>Dolor</li>
+                <li>Sit</li>
+                <li>Amet</li>
+                <li>Consectetur</li>
+                <li>Adipiscing</li>
+                <li>Elit</li>
+            </ul>
         </div>
-        <script src="../js/index.js"></script>
+        <script src="..\js\index.js"></script>
     </body>
 
 </html>
