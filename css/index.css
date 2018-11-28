@@ -6,7 +6,7 @@
     --body-color: rgba(255, 255, 255, 0.57);
 
     --puzzle-background-color: #111111;
-    --puzzle-color: rgba(255, 255, 255, 1.00); 
+    --puzzle-color: rgba(255, 255, 255, 1.00);
 
     --puzzle__header-background-color: #222222;
 }
@@ -14,7 +14,7 @@
 body {
     margin: 0;
     padding: 0;
-    
+
     font-family: 'Ubuntu Mono', monospace;
 
     background-color: var(--body-background-color);
@@ -39,18 +39,18 @@ body {
     border-radius: 8px;
 
     overflow: hidden;
-    
+
     margin: 0 0;
 }
 
 .puzzle__header {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     background-color: var(--puzzle__header-background-color);
 }
 
 .puzzle__title {
-    padding: 0 16px; 
+    padding: 0 16px;
     line-height: 48px;
 
     text-transform: capitalize;
@@ -69,7 +69,7 @@ body {
     border: none;
     border-radius: 4px;
 
-    padding 0 8px;
+    padding: 0 8px;
 
     font-family: inherit;
     font-weight: bold;
@@ -99,7 +99,7 @@ body {
     position: relative;
 
     width: 100%;
-    
+
     padding-top: 100%;
 
     user-select: none;
@@ -136,7 +136,7 @@ body {
     columns: 2;
     -webkit-columns: 2;
     -moz-columns: 2;
-    
+
     padding-left: 0;
 }
 
@@ -247,4 +247,3 @@ body {
         opacity: 0;
     }
 }
-

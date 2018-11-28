@@ -10,10 +10,6 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
         "linebreak-style": [
             "error",
             "unix"
@@ -29,6 +25,10 @@
         "no-console": "off",
         "no-unused-vars": "off",
         "no-undef": "off",
-        "no-empty": "off"
+        "no-empty": "off",
+        "indent": [
+            "warn",
+            "tab"
+        ]
     }
 }
