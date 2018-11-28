@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700');
 
 :root {
-    --puzzle__grid-size: 10
+    --puzzle__grid-size: 10;
+    --body-background-color: #444444;
+    --body-color: rgba(255, 255, 255, 0.57);
+
+    --puzzle-background-color: #111111;
+    --puzzle-color: rgba(255, 255, 255, 1.00); 
+
+    --puzzle__header-background-color: #222222;
 }
 
 body {
@@ -10,8 +17,8 @@ body {
     
     font-family: 'Ubuntu Mono', monospace;
 
-    background-color: white;
-    color: rgba(0, 0, 0, 0.87);
+    background-color: var(--body-background-color);
+    color: var(--body-color);
 }
 
 #wrapper {
@@ -27,8 +34,9 @@ body {
 }
 
 .puzzle {
-    background-color: lightGrey;
-    border-radius: 4px;
+    background-color: var(--puzzle-background-color);
+    color: white;
+    border-radius: 8px;
 
     overflow: hidden;
     
@@ -38,11 +46,11 @@ body {
 .puzzle__header {
     display: flex;
     justify-content: space-between; 
-    background-color: rgba(0, 0, 0, 0.20);
+    background-color: var(--puzzle__header-background-color);
 }
 
 .puzzle__title {
-    padding: 0 8px; 
+    padding: 0 16px; 
     line-height: 48px;
 
     text-transform: capitalize;
@@ -93,6 +101,10 @@ body {
     width: 100%;
     
     padding-top: 100%;
+
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 .puzzle__grid {
@@ -169,7 +181,7 @@ body {
     width: 5px;
     height: 14px;
     border-radius: 20%;
-    background: rgba(0, 0, 0, 0.57);
+    background: rgba(255, 255, 255, 0.57);
 }
 
 .lds-spinner div:nth-child(1) {
