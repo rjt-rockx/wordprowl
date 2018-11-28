@@ -1,59 +1,53 @@
 var socket = io.connect();
 
 function getNewPuzzle() {
-    let puzzleTitle = document.getElementById('puzzle__title');
-    puzzleTitle.innerHTML = '';
-
-    let puzzleGrid = document.getElementById('puzzle__grid');
-    puzzleGrid.innerHTML = '';
-
-    let wordList = document.getElementById('word__list');
-    wordList.innerHTML = '';
-
-    let puzzleLoadingSpinner = document.getElementById('puzzle__loading-spinner');
-    puzzleLoadingSpinner.classList.remove('puzzle__loading-spinner--hidden');
-
-    socket.emit('getNewPuzzle');
+    hidePuzzle();
+    emptyPuzzle();
+    socket.emit("getNewPuzzle");
 }
 
-socket.on('createPuzzle', function (data) {
-    console.log(data);
+function hidePuzzle() {
+    document.getElementById("puzzle__loading-spinner").classList.remove("puzzle__loading-spinner--hidden");
+}
 
-    let puzzleTitle = document.getElementById('puzzle__title');
-    let puzzleGrid = document.getElementById('puzzle__grid');
-    let wordList = document.getElementById('word__list');
+function emptyPuzzle() {
+    for (let element of ["puzzle__title", "puzzle__grid", "word__list"])
+        document.getElementById(element).innerHTML = "";
+}
 
-    let puzzleLoadingSpinner = document.getElementById('puzzle__loading-spinner');
-    puzzleLoadingSpinner.classList.remove('puzzle__loading-spinner--hidden');
+function showPuzzle() {
+    document.getElementById("puzzle__loading-spinner").classList.add("puzzle__loading-spinner--hidden");
+}
 
-    puzzleTitle.innerHTML = '<h3>' + data.category.toLowerCase() + '</h3>';
+socket.on("createPuzzle", function ({ puzzle, size, category, words }) {
+    emptyPuzzle();
+    let puzzleTitle = document.getElementById("puzzle__title");
+    let puzzleGrid = document.getElementById("puzzle__grid");
+    let wordList = document.getElementById("word__list");
 
-    document.documentElement.style.setProperty('--puzzle__grid-size', data.size);
+    let puzzleLoadingSpinner = document.getElementById("puzzle__loading-spinner");
+    puzzleLoadingSpinner.classList.remove("puzzle__loading-spinner--hidden");
 
-    let puzzle = data.puzzle;
-    for(let i = 0; i < puzzle.length; i++) {
-        for(let j = 0; j < puzzle[i].length; j++) {
-            let puzzleGridCell = document.createElement('div');
-            puzzleGridCell.classList.add('puzzle__grid-cell');
+    puzzleTitle.innerHTML = "<h3>" + category.toLowerCase() + "</h3>";
 
-            let span = document.createElement('span');
-            span.innerHTML = puzzle[i][j];
+    document.documentElement.style.setProperty("--puzzle__grid-size", size);
 
+    for (let row of puzzle) {
+        for (let letter of row) {
+            let puzzleGridCell = document.createElement("div");
+            puzzleGridCell.classList.add("puzzle__grid-cell");
+            let span = document.createElement("span");
+            span.innerHTML = letter;
             puzzleGridCell.appendChild(span);
             puzzleGrid.appendChild(puzzleGridCell);
         }
     }
-
-    let words = data.words;
-    for(let i = 0; i < words.length; i++) {
-        let wordListItem = document.createElement('li');
-        wordListItem.innerHTML = words[i].toLowerCase();
-
+    for (let word of words) {
+        let wordListItem = document.createElement("li");
+        wordListItem.innerHTML = word.toLowerCase();
         wordList.appendChild(wordListItem);
     }
-
-    puzzleLoadingSpinner.classList.add('puzzle__loading-spinner--hidden');
+    showPuzzle();
 });
 
 getNewPuzzle();
-

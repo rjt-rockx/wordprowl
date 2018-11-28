@@ -1,5 +1,5 @@
-const letters = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
-const allOrientations = ['horizontal', 'horizontalBack', 'vertical', 'verticalUp', 'diagonal', 'diagonalUp', 'diagonalBack', 'diagonalUpBack'];
+const letters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+const allOrientations = ["horizontal", "horizontalBack", "vertical", "verticalUp", "diagonal", "diagonalUp", "diagonalBack", "diagonalUpBack"];
 
 // The definition of the orientation, calculates the next square given a
 // starting square (x,y) and distance (i) from that square.
@@ -236,7 +236,7 @@ const fillPuzzle = function (words, options) {
     for (i = 0; i < options.height; i++) {
         puzzle.push([]);
         for (j = 0; j < options.width; j++) {
-            puzzle[i].push('');
+            puzzle[i].push("");
         }
     }
 
@@ -383,7 +383,7 @@ const calcOverlap = function (word, puzzle, x, y, fnGetSquare) {
         }
         // if it contains a different letter, than our word doesn't fit
         // here, return -1
-        else if (square !== '') {
+        else if (square !== "") {
             return -1;
         }
     }
@@ -446,7 +446,7 @@ const placeWord = function (puzzle, word, x, y, fnGetSquare) {
  */
 const newPuzzle = function (words, settings) {
     if (!words.length) {
-        throw new Error('Zero words provided');
+        throw new Error("Zero words provided");
     }
     let wordList, puzzle, attempts = 0,
         gridGrowths = 0,
@@ -493,11 +493,11 @@ const newPuzzle = function (words, settings) {
     if (options.fillBlanks) {
         let lettersToAdd, fillingBlanksCount = 0,
             extraLetterGenerator;
-        if (typeof options.fillBlanks === 'function') {
+        if (typeof options.fillBlanks === "function") {
             extraLetterGenerator = options.fillBlanks;
-        } else if (typeof options.fillBlanks === 'string') {
-            lettersToAdd = options.fillBlanks.toLowerCase().split('');
-            extraLetterGenerator = () => lettersToAdd.pop() || (fillingBlanksCount++ && '');
+        } else if (typeof options.fillBlanks === "string") {
+            lettersToAdd = options.fillBlanks.toLowerCase().split("");
+            extraLetterGenerator = () => lettersToAdd.pop() || (fillingBlanksCount++ && "");
         } else {
             extraLetterGenerator = () => letters[Math.floor(Math.random() * letters.length)];
         }
@@ -586,11 +586,11 @@ const fillBlanks = function ({
  */
 const solvePuzzle = function (puzzle, words) {
     let options = {
-        height: puzzle.length,
-        width: puzzle[0].length,
-        orientations: allOrientations,
-        preferOverlap: true
-    },
+            height: puzzle.length,
+            width: puzzle[0].length,
+            orientations: allOrientations,
+            preferOverlap: true
+        },
         found = [],
         notFound = [];
 
@@ -620,13 +620,13 @@ const solvePuzzle = function (puzzle, words) {
  * @api public
  */
 const printPuzzle = function (puzzle) {
-    let puzzleString = '';
+    let puzzleString = "";
     for (let i = 0, height = puzzle.length; i < height; i++) {
         let row = puzzle[i];
         for (let j = 0, width = row.length; j < width; j++) {
-            puzzleString += (row[j] === '' ? ' ' : row[j]) + ' ';
+            puzzleString += (row[j] === "" ? " " : row[j]) + " ";
         }
-        puzzleString += '\n';
+        puzzleString += "\n";
     }
     return puzzleString;
 };
