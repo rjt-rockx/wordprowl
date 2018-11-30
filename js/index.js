@@ -1,4 +1,4 @@
-var socket = io.connect();
+let socket = io.connect();
 
 function getNewPuzzle() {
 	hidePuzzle();
@@ -20,47 +20,47 @@ function showPuzzle() {
 }
 
 function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-      x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
-    };
+	let rect = canvas.getBoundingClientRect();
+	return {
+		x: evt.clientX - rect.left,
+		y: evt.clientY - rect.top
+	};
 }
 
 function initCanvas(puzzle, size, category, words) {
-    var canvas = document.getElementById('puzzle__canvas');
+	let canvas = document.getElementById("puzzle__canvas");
 
-    var ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#ff0000';
+	let ctx = canvas.getContext("2d");
+	ctx.strokeStyle = "#ff0000";
 
-    canvas.width = $('#puzzle__grid').width();
-    canvas.height = $('#puzzle__grid').height();
-    
-    puzzleCellSide = canvas.width/size;
+	canvas.width = $("#puzzle__grid").width();
+	canvas.height = $("#puzzle__grid").height();
 
-    var startX = 0;
-    var startY = 0;
-    var endX = 0;
-    var endY = 0;
+	puzzleCellSide = canvas.width/size;
 
-    $('#puzzle__canvas').mousedown((evt)=>{
-        let pos = getMousePos(canvas, evt);
-        startX = Math.floor(pos.x/puzzleCellSide);
-        startY = Math.floor(pos.y/puzzleCellSide);
-        console.log({startX, startY});
+	let startX = 0;
+	let startY = 0;
+	let endX = 0;
+	let endY = 0;
 
-    });
+	$("#puzzle__canvas").mousedown((evt)=>{
+		let pos = getMousePos(canvas, evt);
+		startX = Math.floor(pos.x/puzzleCellSide);
+		startY = Math.floor(pos.y/puzzleCellSide);
+		console.log({startX, startY});
 
-    $('#puzzle__canvas').mouseup((evt)=>{
-        let pos = getMousePos(canvas, evt);
-        endX = Math.floor(pos.x/puzzleCellSide);
-        endY = Math.floor(pos.y/puzzleCellSide);
-        console.log({endX, endY});
-    });
+	});
+
+	$("#puzzle__canvas").mouseup((evt)=>{
+		let pos = getMousePos(canvas, evt);
+		endX = Math.floor(pos.x/puzzleCellSide);
+		endY = Math.floor(pos.y/puzzleCellSide);
+		console.log({endX, endY});
+	});
 }
 
 function resetCanvas() {
-    $('#puzzle__canvas').off();
+	$("#puzzle__canvas").off();
 }
 
 socket.on("createPuzzle", function ({ puzzle, size, category, words }) {
@@ -92,7 +92,7 @@ socket.on("createPuzzle", function ({ puzzle, size, category, words }) {
 		wordList.appendChild(wordListItem);
 	}
 	showPuzzle();
-    initCanvas(puzzle, size, category, words);
+	initCanvas(puzzle, size, category, words);
 });
 
 getNewPuzzle();
