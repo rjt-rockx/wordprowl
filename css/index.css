@@ -6,9 +6,11 @@
     --body-color: rgba(255, 255, 255, 0.57);
 
     --puzzle-background-color: #111111;
-    --puzzle-color: rgba(255, 255, 255, 1.00);
+    --puzzle-color: rgba(255, 255, 255, 0.57);
 
     --puzzle__header-background-color: #222222;
+
+    --puzzle__title-color: rgba(255, 255, 255, 0.87)
 }
 
 body {
@@ -35,7 +37,7 @@ body {
 
 .puzzle {
     background-color: var(--puzzle-background-color);
-    color: white;
+    color: var(--puzzle-color);
     border-radius: 8px;
 
     overflow: hidden;
@@ -54,6 +56,8 @@ body {
     line-height: 48px;
 
     text-transform: capitalize;
+
+    color: var(--puzzle__title-color);
 }
 
 .puzzle__title h3 {
@@ -69,7 +73,7 @@ body {
     border: none;
     border-radius: 4px;
 
-    padding: 0 8px;
+    padding: 0 16px;
 
     font-family: inherit;
     font-weight: bold;
@@ -83,7 +87,7 @@ body {
 }
 
 .button:active {
-    padding: 0 8px;
+    padding: 0 16px;
 }
 
 .button--new-puzzle {
