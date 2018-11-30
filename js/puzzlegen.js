@@ -8,7 +8,7 @@ let uniqueArray = (arrArg) => arrArg.filter((elem, pos, arr) => arr.indexOf(elem
 let getWords = async function (category) {
 	let jsonData = await datamuse.words({ ml: category });
 	let words = jsonData.sort((a, b) => a.score > b.score).map(entry => entry.word.toUpperCase());
-	let filteredWords = uniqueArray(words.filter(word => !(word.includes(" ") || word.includes("-"))));
+	let filteredWords = uniqueArray(words.filter(word => !(word.includes(" ") || word.includes("-") || word.length < 5 || word.length > 15)));
 	let similarWords = [];
 	filteredWords.map((word, index, arr) => {
 		findBestMatch(word, arr).ratings.sort((a, b) => a.rating < b.rating).filter(entry => entry.rating > 0.7 && entry.target !== word).map(entry => similarWords.push(entry.target));
