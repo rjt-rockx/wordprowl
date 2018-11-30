@@ -72,7 +72,7 @@ socket.on("createPuzzle", function ({ puzzle, size, category, words }) {
 	let puzzleLoadingSpinner = document.getElementById("puzzle__loading-spinner");
 	puzzleLoadingSpinner.classList.remove("puzzle__loading-spinner--hidden");
 
-	puzzleTitle.innerHTML = "<h3>" + category.toLowerCase() + "</h3>";
+	puzzleTitle.innerHTML = `<h3>${category.toLowerCase()} (${size}x${size})</h3>`;
 
 	document.documentElement.style.setProperty("--puzzle__grid-size", size);
 
