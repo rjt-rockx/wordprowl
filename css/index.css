@@ -86,6 +86,10 @@ body {
     cursor: pointer;
 }
 
+.button:focus {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .button:active {
     padding: 0 16px;
 }
