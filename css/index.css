@@ -94,6 +94,10 @@ body {
     padding: 0 16px;
 }
 
+.button:focus {
+    outline: 0 !important;
+}
+
 .button--new-puzzle {
     color: white;
     background-color: #035891;
