@@ -63,8 +63,11 @@ typings/
 # vim swp files
 *.swp
 
-#vim swo files
+# vim swo files
 *.swo
 
-#local vimrc
+# local vimrc
 _lvimrc
+
+# test files
+test*.js
