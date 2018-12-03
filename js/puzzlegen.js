@@ -55,7 +55,7 @@ let createPuzzle = async function () {
 		maxGridGrowth: 15,
 		fillBlanks: true,
 		maxAttempts: 10,
-		orientations: ["horizontal", "vertical", "verticalUp", "diagonal", "diagonalUp"],
+		orientations: ["horizontal", "horizontalBack", "vertical", "verticalUp", "diagonal", "diagonalUp", "diagonalBack", "diagonalUpBack"],
 	});
 
 	let solution = wordprowl.solvePuzzle(puzzle, words);
