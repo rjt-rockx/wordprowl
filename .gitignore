@@ -65,3 +65,6 @@ typings/
 
 #vim swo files
 *.swo
+
+#local vimrc
+_lvimrc
