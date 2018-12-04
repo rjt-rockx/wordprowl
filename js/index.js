@@ -72,9 +72,10 @@ function initCanvas({ size, wordManager }) {
 		};
 		if (start.x == end.x && start.y == end.y)
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-		wordManager.tryCoords(start, end);
+		if (wordManager.tryCoords(start, end))
+			setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 1000);
+		else setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 250);
 		$("#puzzle__canvas").unbind("mousemove");
-		setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 2500);
 	});
 }
 
@@ -135,9 +136,10 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 
 		tryCoords(start, end) {
 			const [entry] = this._words.filter(entry => entry.start.x === start.x && entry.start.y === start.y && entry.end.x === end.x && entry.end.y === end.y);
-			if (!entry) return;
+			if (!entry) return false;
 			this.found(entry.word);
 			this.updateList();
+			return true;
 		}
 	}
 	const wordManagerInstance = new wordManager(solution.found);
