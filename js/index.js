@@ -53,6 +53,7 @@ function initCanvas(puzzle, size, category, words) {
 			ctx.beginPath();
 			ctx.lineWidth = 16;
 			ctx.lineCap = "round";
+			ctx.strokeStyle = "rgba(255, 0, 0, 0.4)";
 			ctx.moveTo(
 				startX*puzzleCellSide + puzzleCellSide/2,
 				startY*puzzleCellSide + puzzleCellSide/2);
