@@ -1,4 +1,4 @@
-let socket = io.connect();
+const socket = io.connect();
 
 function getNewPuzzle() {
 	hidePuzzle();
@@ -12,7 +12,7 @@ function hidePuzzle() {
 }
 
 function emptyPuzzle() {
-	for (let element of ["puzzle__title", "puzzle__grid", "word__list"])
+	for (const element of ["puzzle__title", "puzzle__grid", "word__list"])
 		document.getElementById(element).innerHTML = "";
 }
 
@@ -20,103 +20,102 @@ function showPuzzle() {
 	document.getElementById("puzzle__loading-spinner").classList.add("puzzle__loading-spinner--hidden");
 }
 
-function getMousePos(canvas, evt) {
-	let rect = canvas.getBoundingClientRect();
+function getMousePosition(canvas, event) {
+	const boundingRectangle = canvas.getBoundingClientRect();
 	return {
-		x: evt.clientX - rect.left,
-		y: evt.clientY - rect.top
+		x: event.clientX - boundingRectangle.left,
+		y: event.clientY - boundingRectangle.top
 	};
 }
 
-function initCanvas(puzzle, size, category, words) {
-	let canvas = document.getElementById("puzzle__canvas");
-
-	let ctx = canvas.getContext("2d");
+function initCanvas({ size, found }) {
+	const canvas = document.getElementById("puzzle__canvas");
+	const ctx = canvas.getContext("2d");
 	ctx.strokeStyle = "#ff0000";
+	Object.assign(canvas, {
+		width: $("#puzzle__grid").width(),
+		height: $("#puzzle__grid").height()
+	});
+	const puzzleCellSide = canvas.width / size;
+	let start = { x: 0, y: 0 }, end = { x: 0, y: 0 };
+	$("#puzzle__canvas").mousedown(event => {
+		let position = getMousePosition(canvas, event);
+		start = {
+			x: Math.floor(position.x / puzzleCellSide),
+			y: Math.floor(position.y / puzzleCellSide)
+		};
 
-	canvas.width = $("#puzzle__grid").width();
-	canvas.height = $("#puzzle__grid").height();
-
-	puzzleCellSide = canvas.width/size;
-
-	let startX = 0;
-	let startY = 0;
-	let endX = 0;
-	let endY = 0;
-
-	$("#puzzle__canvas").mousedown((evt)=>{
-		let pos = getMousePos(canvas, evt);
-		startX = Math.floor(pos.x/puzzleCellSide);
-		startY = Math.floor(pos.y/puzzleCellSide);
-		console.log({startX, startY});
-		$("#puzzle__canvas").mousemove((evt)=>{
+		$("#puzzle__canvas").mousemove(event => {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.beginPath();
-			ctx.lineWidth = 16;
-			ctx.lineCap = "round";
-			ctx.strokeStyle = "rgba(255, 0, 0, 0.4)";
+			Object.assign(ctx, {
+				lineWidth: Math.floor(300 / size),
+				lineCap: "round",
+				strokeStyle: "rgba(255, 255, 255, 0.08)"
+			});
 			ctx.moveTo(
-				startX*puzzleCellSide + puzzleCellSide/2,
-				startY*puzzleCellSide + puzzleCellSide/2
+				start.x * puzzleCellSide + puzzleCellSide / 2,
+				start.y * puzzleCellSide + puzzleCellSide / 2
 			);
-			pos = getMousePos(canvas, evt);
+			position = getMousePosition(canvas, event);
 			ctx.lineTo(
-				puzzleCellSide*(Math.floor(pos.x/puzzleCellSide) + 0.5),
-				puzzleCellSide*(Math.floor(pos.y/puzzleCellSide) + 0.5)
+				puzzleCellSide * (Math.floor(position.x / puzzleCellSide) + 0.5),
+				puzzleCellSide * (Math.floor(position.y / puzzleCellSide) + 0.5)
 			);
 			ctx.stroke();
 		});
 	});
 
-	$("#puzzle__canvas").mouseup((evt)=>{
-		let pos = getMousePos(canvas, evt);
-		endX = Math.floor(pos.x/puzzleCellSide);
-		endY = Math.floor(pos.y/puzzleCellSide);
-		console.log({endX, endY});
-
+	$("#puzzle__canvas").mouseup(event => {
+		const position = getMousePosition(canvas, event);
+		end = {
+			x: Math.floor(position.x / puzzleCellSide),
+			y: Math.floor(position.y / puzzleCellSide)
+		};
+		if (start.x == end.x && start.y == end.y)
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+		for (const wordEntry of found)
+			if (wordEntry.start.x === start.x && wordEntry.start.y === start.y)
+				if (wordEntry.end.x === end.x && wordEntry.end.y === end.y)
+					console.log(`${wordEntry.word} found between [${start.x},${start.y}] and [${end.x},${end.y}]`);
 		$("#puzzle__canvas").unbind("mousemove");
+		setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 2500);
 	});
 }
 
 function resetCanvas() {
-	let canvas = $("#puzzle__canvas").get(0);
-	let ctx = canvas.getContext("2d");
-
+	const canvas = $("#puzzle__canvas").get(0);
+	const ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	$("#puzzle__canvas").off();
 }
 
-socket.on("createPuzzle", function ({ puzzle, size, category, words }) {
+socket.on("createPuzzle", ({ puzzle, size, category, words, solution }) => {
 	emptyPuzzle();
-	let puzzleTitle = document.getElementById("puzzle__title");
-	let puzzleGrid = document.getElementById("puzzle__grid");
-	let wordList = document.getElementById("word__list");
-
-	let puzzleLoadingSpinner = document.getElementById("puzzle__loading-spinner");
+	const puzzleTitle = document.getElementById("puzzle__title");
+	const puzzleGrid = document.getElementById("puzzle__grid");
+	const wordList = document.getElementById("word__list");
+	const puzzleLoadingSpinner = document.getElementById("puzzle__loading-spinner");
 	puzzleLoadingSpinner.classList.remove("puzzle__loading-spinner--hidden");
-
 	puzzleTitle.innerHTML = `<h3>${category.toLowerCase()} (${size}x${size})</h3>`;
-
 	document.documentElement.style.setProperty("--puzzle__grid-size", size);
-
-	for (let row of puzzle) {
-		for (let letter of row) {
-			let puzzleGridCell = document.createElement("div");
+	for (const row of puzzle) {
+		for (const letter of row) {
+			const puzzleGridCell = document.createElement("div");
 			puzzleGridCell.classList.add("puzzle__grid-cell");
-			let span = document.createElement("span");
+			const span = document.createElement("span");
 			span.innerHTML = letter;
 			puzzleGridCell.appendChild(span);
 			puzzleGrid.appendChild(puzzleGridCell);
 		}
 	}
-	for (let word of words) {
-		let wordListItem = document.createElement("li");
+	for (const word of words) {
+		const wordListItem = document.createElement("li");
 		wordListItem.innerHTML = word.toLowerCase();
 		wordList.appendChild(wordListItem);
 	}
 	showPuzzle();
-	initCanvas(puzzle, size, category, words);
+	initCanvas({ puzzle, size, category, words, found: solution.found });
 });
 
 getNewPuzzle();
