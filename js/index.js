@@ -3,6 +3,7 @@ let socket = io.connect();
 function getNewPuzzle() {
 	hidePuzzle();
 	emptyPuzzle();
+	resetCanvas();
 	socket.emit("getNewPuzzle");
 }
 
@@ -56,7 +57,8 @@ function initCanvas(puzzle, size, category, words) {
 			ctx.strokeStyle = "rgba(255, 0, 0, 0.4)";
 			ctx.moveTo(
 				startX*puzzleCellSide + puzzleCellSide/2,
-				startY*puzzleCellSide + puzzleCellSide/2);
+				startY*puzzleCellSide + puzzleCellSide/2
+			);
 			pos = getMousePos(canvas, evt);
 			ctx.lineTo(
 				puzzleCellSide*(Math.floor(pos.x/puzzleCellSide) + 0.5),
@@ -77,6 +79,11 @@ function initCanvas(puzzle, size, category, words) {
 }
 
 function resetCanvas() {
+	let canvas = $("#puzzle__canvas").get(0);
+	let ctx = canvas.getContext("2d");
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 	$("#puzzle__canvas").off();
 }
 
