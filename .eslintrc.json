@@ -29,7 +29,6 @@
         "indent": [
             "warn",
             "tab"
-        ],
-        "prefer-const": "error"
+        ]
     }
 }
