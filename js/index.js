@@ -110,7 +110,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			this._words = words.map(entry => ({ ...entry, found: false }));
 		}
 
-		found(word) {
+		markAsFound(word) {
 			const words = this._words.map(entry => entry.word.toLowerCase());
 			const index = words.indexOf(word.toLowerCase());
 			if (index < 0) return;
@@ -126,7 +126,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			}
 		}
 
-		find(word) {
+		getCoords(word) {
 			const words = this._words.map(entry => entry.word.toLowerCase());
 			const index = words.indexOf(word.toLowerCase());
 			if (index < 0) return;
@@ -134,10 +134,26 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			return { start, end, orientation };
 		}
 
+		get found() {
+			return this._words.filter(entry => entry.found).map(entry => entry.word).sort();
+		}
+
+		get foundCoords() {
+			return this._words.filter(entry => entry.found).map(({ start, end, orientation }) => ({ start, end, orientation }));
+		}
+
+		get notFound() {
+			return this._words.filter(entry => !entry.found).map(entry => entry.word).sort();
+		}
+
+		get notFoundCoords() {
+			return this._words.filter(entry => !entry.found).map(({ start, end, orientation }) => ({ start, end, orientation }));
+		}
+
 		tryCoords(start, end) {
 			const [entry] = this._words.filter(entry => entry.start.x === start.x && entry.start.y === start.y && entry.end.x === end.x && entry.end.y === end.y);
 			if (!entry) return false;
-			this.found(entry.word);
+			this.markAsFound(entry.word);
 			this.updateList();
 			return true;
 		}
