@@ -105,7 +105,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			puzzleGrid.appendChild(puzzleGridCell);
 		}
 	}
-	class wordManager {
+	class WordManager {
 		constructor(words) {
 			this._words = words.map(entry => ({ ...entry, found: false }));
 		}
@@ -158,7 +158,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			return true;
 		}
 	}
-	const wordManagerInstance = new wordManager(solution.found);
+	const wordManagerInstance = new WordManager(solution.found);
 	wordManagerInstance.updateList();
 	showPuzzle();
 	initCanvas({ puzzle, size, category, wordManager: wordManagerInstance });
