@@ -48,7 +48,21 @@ function initCanvas(puzzle, size, category, words) {
 		startX = Math.floor(pos.x/puzzleCellSide);
 		startY = Math.floor(pos.y/puzzleCellSide);
 		console.log({startX, startY});
-
+		$("#puzzle__canvas").mousemove((evt)=>{
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.beginPath();
+			ctx.lineWidth = 16;
+			ctx.lineCap = "round";
+			ctx.moveTo(
+				startX*puzzleCellSide + puzzleCellSide/2,
+				startY*puzzleCellSide + puzzleCellSide/2);
+			pos = getMousePos(canvas, evt);
+			ctx.lineTo(
+				puzzleCellSide*(Math.floor(pos.x/puzzleCellSide) + 0.5),
+				puzzleCellSide*(Math.floor(pos.y/puzzleCellSide) + 0.5)
+			);
+			ctx.stroke();
+		});
 	});
 
 	$("#puzzle__canvas").mouseup((evt)=>{
@@ -56,6 +70,8 @@ function initCanvas(puzzle, size, category, words) {
 		endX = Math.floor(pos.x/puzzleCellSide);
 		endY = Math.floor(pos.y/puzzleCellSide);
 		console.log({endX, endY});
+
+		$("#puzzle__canvas").unbind("mousemove");
 	});
 }
 
