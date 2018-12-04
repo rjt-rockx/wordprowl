@@ -28,14 +28,12 @@ function getMousePosition(canvas, event) {
 	};
 }
 
-function initCanvas({ size, found }) {
+function initCanvas({ size, wordManager }) {
 	const canvas = document.getElementById("puzzle__canvas");
 	const ctx = canvas.getContext("2d");
 	ctx.strokeStyle = "#ff0000";
-	Object.assign(canvas, {
-		width: $("#puzzle__grid").width(),
-		height: $("#puzzle__grid").height()
-	});
+	canvas.width = $("#puzzle__grid").width();
+	canvas.height = $("#puzzle__grid").height();
 	const puzzleCellSide = canvas.width / size;
 	let start = { x: 0, y: 0 }, end = { x: 0, y: 0 };
 	$("#puzzle__canvas").mousedown(event => {
@@ -74,10 +72,7 @@ function initCanvas({ size, found }) {
 		};
 		if (start.x == end.x && start.y == end.y)
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-		for (const wordEntry of found)
-			if (wordEntry.start.x === start.x && wordEntry.start.y === start.y)
-				if (wordEntry.end.x === end.x && wordEntry.end.y === end.y)
-					console.log(`${wordEntry.word} found between [${start.x},${start.y}] and [${end.x},${end.y}]`);
+		wordManager.tryCoords(start, end);
 		$("#puzzle__canvas").unbind("mousemove");
 		setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 2500);
 	});
@@ -90,7 +85,7 @@ function resetCanvas() {
 	$("#puzzle__canvas").off();
 }
 
-socket.on("createPuzzle", ({ puzzle, size, category, words, solution }) => {
+socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 	emptyPuzzle();
 	const puzzleTitle = document.getElementById("puzzle__title");
 	const puzzleGrid = document.getElementById("puzzle__grid");
@@ -109,13 +104,46 @@ socket.on("createPuzzle", ({ puzzle, size, category, words, solution }) => {
 			puzzleGrid.appendChild(puzzleGridCell);
 		}
 	}
-	for (const word of words) {
-		const wordListItem = document.createElement("li");
-		wordListItem.innerHTML = word.toLowerCase();
-		wordList.appendChild(wordListItem);
+	class wordManager {
+		constructor(words) {
+			this._words = words.map(entry => ({ ...entry, found: false }));
+		}
+
+		found(word) {
+			const words = this._words.map(entry => entry.word.toLowerCase());
+			const index = words.indexOf(word.toLowerCase());
+			if (index < 0) return;
+			this._words[index].found = true;
+		}
+
+		updateList() {
+			wordList.innerHTML = "";
+			for (const entry of this._words) {
+				const wordListItem = document.createElement("li");
+				wordListItem.innerHTML = entry.found ? `<s>${entry.word.toLowerCase()}</s>` : entry.word.toLowerCase();
+				wordList.appendChild(wordListItem);
+			}
+		}
+
+		find(word) {
+			const words = this._words.map(entry => entry.word.toLowerCase());
+			const index = words.indexOf(word.toLowerCase());
+			if (index < 0) return;
+			const { start, end, orientation } = this._words[index];
+			return { start, end, orientation };
+		}
+
+		tryCoords(start, end) {
+			const [entry] = this._words.filter(entry => entry.start.x === start.x && entry.start.y === start.y && entry.end.x === end.x && entry.end.y === end.y);
+			if (!entry) return;
+			this.found(entry.word);
+			this.updateList();
+		}
 	}
+	const wordManagerInstance = new wordManager(solution.found);
+	wordManagerInstance.updateList();
 	showPuzzle();
-	initCanvas({ puzzle, size, category, words, found: solution.found });
+	initCanvas({ puzzle, size, category, wordManager: wordManagerInstance });
 });
 
 getNewPuzzle();
