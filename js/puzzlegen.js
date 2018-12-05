@@ -2,17 +2,18 @@ const datamuse = require("datamuse");
 const randomWord = require("random-word");
 const wordprowl = require("./wordprowl.js");
 const { findBestMatch } = require("string-similarity");
-
-let uniqueArray = (arrArg) => arrArg.filter((elem, pos, arr) => arr.indexOf(elem) == pos);
+const uniqueArray = arrArg => [...new Set(arrArg)];
 
 let getWords = async function (category) {
 	let jsonData = await datamuse.words({ ml: category });
 	let words = jsonData.sort((a, b) => a.score > b.score).map(entry => entry.word.toUpperCase());
 	let filteredWords = uniqueArray(words.filter(word => !(word.includes(" ") || word.includes("-") || word.length < 5 || word.length > 15)));
 	let similarWords = [];
-	filteredWords.map((word, index, arr) => {
-		findBestMatch(word, arr).ratings.sort((a, b) => a.rating < b.rating).filter(entry => entry.rating > 0.7 && entry.target !== word).map(entry => similarWords.push(entry.target));
-	});
+	for (const word of filteredWords) {
+		let { ratings } = findBestMatch(word, filteredWords);
+		ratings = ratings.sort((a, b) => a.rating < b.rating).filter(entry => entry.rating > 0.7 && entry.target !== word);
+		similarWords.push(...ratings.map(entry => entry.target));
+	}
 	filteredWords = filteredWords.filter(word => !similarWords.includes(word));
 	let logString = `${filteredWords.length > 0 ? filteredWords.length.toString().padStart(2, "0") : "No"} words found for category ${category}.`;
 	console.log(logString.padEnd(50) + `[${similarWords.length.toString().padStart(2, "0")} filtered]`);
@@ -33,8 +34,7 @@ const getEndCell = {
 const formatSolution = ({ word, orientation, x, y }) => {
 	const endCellCoords = getEndCell[orientation](x, y, word.length - 1);
 	return {
-		word: word,
-		orientation: orientation,
+		word, orientation,
 		start: { x, y },
 		end: {
 			x: endCellCoords.x,
@@ -59,9 +59,8 @@ let createPuzzle = async function () {
 	});
 
 	let solution = wordprowl.solvePuzzle(puzzle, words);
-	let size = puzzle[0].length;
 	solution.found = solution.found.map(formatSolution);
-	return { category, puzzle, words, solution, size };
+	return { category, puzzle, words, solution, size: puzzle[0].length };
 };
 
 exports.createPuzzle = createPuzzle;

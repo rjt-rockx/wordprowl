@@ -1,4 +1,4 @@
-const letters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+const defaultLetters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 const allOrientations = ["horizontal", "horizontalBack", "vertical", "verticalUp", "diagonal", "diagonalUp", "diagonalBack", "diagonalUpBack"];
 
 // The definition of the orientation, calculates the next square given a
@@ -74,7 +74,7 @@ const fillPuzzle = function (words, options) {
 	}
 
 	// add each word into the puzzle one at a time
-	for (let word of words)
+	for (const word of words)
 		if (!placeWordInPuzzle(puzzle, options, word))
 			// if a word didn't fit in the puzzle, give up
 			return null;
@@ -97,12 +97,13 @@ const fillPuzzle = function (words, options) {
 const placeWordInPuzzle = function (puzzle, options, word) {
 
 	// find all of the best locations where this word would fit
-	let locations = findBestLocations(puzzle, options, word);
-	if (locations.length === 0) return false;
+	const locations = findBestLocations(puzzle, options, word);
+	if (locations.length === 0)
+		return false;
 
 	// select a location at random and place the word there
-	let sel = locations[Math.floor(Math.random() * locations.length)];
-	placeWord(puzzle, word, sel.x, sel.y, orientations[sel.orientation]);
+	const { x, y, orientation } = locations[Math.floor(Math.random() * locations.length)];
+	placeWord(puzzle, word, x, y, orientations[orientation]);
 	return true;
 };
 
@@ -310,7 +311,7 @@ const newPuzzle = function (words, settings) {
 		} else {
 			extraLetterGenerator = () => letters[Math.floor(Math.random() * letters.length)];
 		}
-		let extraLettersCount = fillBlanks({ puzzle, extraLetterGenerator });
+		const extraLettersCount = fillBlanks({ puzzle, extraLetterGenerator });
 		if (lettersToAdd && lettersToAdd.length)
 			throw new Error(`Some extra letters provided were not used: ${lettersToAdd}`);
 		if (lettersToAdd && fillingBlanksCount && !options.allowExtraBlanks)
@@ -410,11 +411,13 @@ const solvePuzzle = function (puzzle, words) {
  * @param {[[String]]} puzzle: The current state of the puzzle
  * @api public
  */
-const printPuzzle = (puzzle) => puzzle.map(row => row.map(letter => letter.length > 0 ? letter : " ").join(" ")).join("\n");
+const printPuzzle = puzzle => puzzle.map(row => row.map(letter => letter.length > 0 ? letter : " ").join(" ")).join("\n");
 
-exports.allOrientations = allOrientations;
-exports.defaultLetters = letters;
-exports.newPuzzle = newPuzzle;
-exports.newPuzzleLax = newPuzzleLax;
-exports.solvePuzzle = solvePuzzle;
-exports.printPuzzle = printPuzzle;
+module.exports = {
+	allOrientations,
+	defaultLetters,
+	newPuzzle,
+	newPuzzleLax,
+	solvePuzzle,
+	printPuzzle
+};
