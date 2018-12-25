@@ -309,7 +309,7 @@ const newPuzzle = function (words, settings) {
 			lettersToAdd = options.fillBlanks.toLowerCase().split("");
 			extraLetterGenerator = () => lettersToAdd.pop() || (fillingBlanksCount++ && "");
 		} else {
-			extraLetterGenerator = () => letters[Math.floor(Math.random() * letters.length)];
+			extraLetterGenerator = () => defaultLetters[Math.floor(Math.random() * defaultLetters.length)];
 		}
 		const extraLettersCount = fillBlanks({ puzzle, extraLetterGenerator });
 		if (lettersToAdd && lettersToAdd.length)
