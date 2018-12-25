@@ -143,6 +143,10 @@ body {
 
     width: 100%;
     height: 100%;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .puzzle__grid-cell {
@@ -156,8 +160,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-
 
 .word__list {
     list-style-type: none;
