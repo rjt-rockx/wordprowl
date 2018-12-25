@@ -44,19 +44,26 @@ const formatSolution = ({ word, orientation, x, y }) => {
 };
 
 let createPuzzle = async function () {
-	let words = [], category;
-	while (words.length < 10) {
-		category = randomWord().toUpperCase();
-		words = await getWords(category);
+	let words = [], category, puzzle;
+	while (!puzzle) {
+		while (words.length < 10) {
+			category = randomWord().toUpperCase();
+			words = await getWords(category);
+		}
+		try {
+			puzzle = wordprowl.newPuzzle(words, {
+				preferOverlap: true,
+				maxGridGrowth: 15,
+				fillBlanks: true,
+				maxAttempts: 10,
+				orientations: ["horizontal", "vertical", "verticalUp", "diagonal", "diagonalUp"],
+			});
+		}
+		catch (err) {
+			console.log(err);
+			puzzle = undefined;
+		};
 	}
-
-	let puzzle = wordprowl.newPuzzle(words, {
-		preferOverlap: true,
-		maxGridGrowth: 15,
-		fillBlanks: true,
-		maxAttempts: 10,
-		orientations: ["horizontal", "vertical", "verticalUp", "diagonal", "diagonalUp"],
-	});
 
 	let solution = wordprowl.solvePuzzle(puzzle, words);
 	solution.found = solution.found.map(formatSolution);
