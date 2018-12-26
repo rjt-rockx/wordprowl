@@ -74,7 +74,8 @@ function initCanvas({ size, wordManager }) {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 		if (wordManager.tryCoords(start, end))
 			setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 1000);
-		else setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 250);
+		else
+			setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 250);
 		$("#puzzle__canvas").unbind("mousemove");
 	});
 }
@@ -92,6 +93,10 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 	const puzzleGrid = document.getElementById("puzzle__grid");
 	const wordList = document.getElementById("word__list");
 	const puzzleLoadingSpinner = document.getElementById("puzzle__loading-spinner");
+	const colorList = [
+		"#FF290D", "#FF9326", "#FDE508", "#BFF428", "#21E950",
+		"#04FFC3", "#00A8DB", "#3941BD", "#B322CE", "#F225AE"
+	];
 	puzzleLoadingSpinner.classList.remove("puzzle__loading-spinner--hidden");
 	puzzleTitle.innerHTML = `<h3>${category.toLowerCase()} (${size}x${size})</h3>`;
 	document.documentElement.style.setProperty("--puzzle__grid-size", size);
@@ -107,7 +112,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 	}
 	class WordManager {
 		constructor(words) {
-			this._words = words.map(entry => ({ ...entry, found: false }));
+			this._words = words.map((entry, index) => ({ ...entry, found: false, color: colorList[index] }));
 		}
 
 		markAsFound(word) {
@@ -121,7 +126,13 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			wordList.innerHTML = "";
 			for (const entry of this._words) {
 				const wordListItem = document.createElement("li");
-				wordListItem.innerHTML = entry.found ? `<s>${entry.word.toLowerCase()}</s>` : entry.word.toLowerCase();
+				if(entry.found) {
+					wordListItem.innerHTML = `<s>${entry.word.toLowerCase()}</s>`;
+					wordListItem.style.color = entry.color;
+				}
+				else {
+					wordListItem.innerHTML = entry.word.toLowerCase();
+				}
 				wordList.appendChild(wordListItem);
 			}
 		}
@@ -132,6 +143,13 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 			if (index < 0) return;
 			const { start, end, orientation } = this._words[index];
 			return { start, end, orientation };
+		}
+
+		getColor(word) {
+			const words = this._words.map(entry => entry.word.toLowerCase());
+			const index = words.indexOf(word.toLowerCase());
+			if (index < 0) return;
+			return this._words[index].color;
 		}
 
 		get found() {
