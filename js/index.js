@@ -53,7 +53,8 @@ function initCanvas({ size, wordManager }) {
 			Object.assign(ctx, {
 				lineWidth: Math.floor(300 / size),
 				lineCap: "round",
-				strokeStyle: "rgba(255, 255, 255, 0.08)"
+				strokeStyle: "#ffffff",
+				globalAlpha: 0.2
 			});
 
 			ctx.moveTo(
