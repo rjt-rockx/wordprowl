@@ -8,16 +8,16 @@ function getNewPuzzle() {
 }
 
 function hidePuzzle() {
-	document.getElementById("puzzle__loading-spinner").classList.remove("puzzle__loading-spinner--hidden");
+	$("#puzzle__loading-spinner").removeClass("puzzle__loading-spinner--hidden");
 }
 
 function emptyPuzzle() {
-	for (const element of ["puzzle__title", "puzzle__grid", "word__list"])
-		document.getElementById(element).innerHTML = "";
+	for (const element of ["#puzzle__title", "#puzzle__grid", "#word__list"])
+		$(element).html("");
 }
 
 function showPuzzle() {
-	document.getElementById("puzzle__loading-spinner").classList.add("puzzle__loading-spinner--hidden");
+	$("#puzzle__loading-spinner").addClass("puzzle__loading-spinner--hidden");
 }
 
 function getMousePosition(canvas, event) {
@@ -29,7 +29,7 @@ function getMousePosition(canvas, event) {
 }
 
 function initCanvas({ size, wordManager }) {
-	const canvas = document.getElementById("puzzle__canvas");
+	const canvas = $("#puzzle__canvas").get(0);
 	const ctx = canvas.getContext("2d");
 	ctx.strokeStyle = "#ff0000";
 	canvas.width = $("#puzzle__grid").width();
@@ -89,25 +89,24 @@ function resetCanvas() {
 
 socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 	emptyPuzzle();
-	const puzzleTitle = document.getElementById("puzzle__title");
-	const puzzleGrid = document.getElementById("puzzle__grid");
-	const wordList = document.getElementById("word__list");
-	const puzzleLoadingSpinner = document.getElementById("puzzle__loading-spinner");
+	const $puzzleTitle = $("#puzzle__title");
+	const $puzzleGrid = $("#puzzle__grid");
+	const $wordList = $("#word__list");
+	const $puzzleLoadingSpinner = $("#puzzle__loading-spinner");
 	const colorList = [
 		"#FF290D", "#FF9326", "#FDE508", "#BFF428", "#21E950",
 		"#04FFC3", "#00A8DB", "#3941BD", "#B322CE", "#F225AE"
 	];
-	puzzleLoadingSpinner.classList.remove("puzzle__loading-spinner--hidden");
-	puzzleTitle.innerHTML = `<h3>${category.toLowerCase()} (${size}x${size})</h3>`;
+	$puzzleLoadingSpinner.removeClass("puzzle__loading-spinner--hidden");
+	$puzzleTitle.html(`<h3>${category.toLowerCase()} (${size}x${size})</h3>`);
 	document.documentElement.style.setProperty("--puzzle__grid-size", size);
 	for (const row of puzzle) {
 		for (const letter of row) {
-			const puzzleGridCell = document.createElement("div");
-			puzzleGridCell.classList.add("puzzle__grid-cell");
-			const span = document.createElement("span");
-			span.innerHTML = letter;
-			puzzleGridCell.appendChild(span);
-			puzzleGrid.appendChild(puzzleGridCell);
+			$puzzleGrid.append(`
+				<div class="puzzle__grid-cell">
+					<span>${ letter }</span>
+				</div>
+			`);
 		}
 	}
 	class WordManager {
@@ -123,17 +122,18 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 		}
 
 		updateList() {
-			wordList.innerHTML = "";
+			$wordList.html("");
 			for (const entry of this._words) {
-				const wordListItem = document.createElement("li");
 				if(entry.found) {
-					wordListItem.innerHTML = `<s>${entry.word.toLowerCase()}</s>`;
-					wordListItem.style.color = entry.color;
+					$wordList.append(`
+						<li style="color: ${ entry.color };">
+							<s>${ entry.word.toLowerCase() }</s>
+						</li>
+					`);
 				}
 				else {
-					wordListItem.innerHTML = entry.word.toLowerCase();
+					$wordList.append(`<li>${ entry.word.toLowerCase() }</li>`);
 				}
-				wordList.appendChild(wordListItem);
 			}
 		}
 
