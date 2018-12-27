@@ -531,7 +531,7 @@ class Wordprowl {
 	 * @public
 	 * @memberof Wordprowl
 	 */
-	solve(puzzle = this.puzzle, words) {
+	solvePuzzle(puzzle = this.puzzle, words) {
 
 		// Check if the puzzle already exists.
 		if (puzzle === this.puzzle && this.solution) {
