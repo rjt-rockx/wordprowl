@@ -13,7 +13,7 @@ class Wordprowl {
 	 * @param {String} [options.letters] Letters to use to fill the remaining blanks.
 	 * @param {Number} [options.height] Height of the puzzle.
 	 * @param {Number} [options.width] Width of the puzzle.
-	 * @param {Array.<String>} [options.orientations=allOrientations] Orientations to place words in.
+	 * @param {String[]} [options.orientations=allOrientations] Orientations to place words in.
 	 * @param {Boolean} [options.fillBlanks=true] Fill blank spaces.
 	 * @param {Boolean} [options.allowExtraBlanks=true] Allow additional blank spaces.
 	 * @param {Number} [options.maxAttempts=3] Number of attempts to generate a puzzle.
@@ -250,11 +250,11 @@ class Wordprowl {
 
 	/**
 	 * Initializes the puzzle and places words in the puzzle one at a time.
-	 * @param {Array.<string>} words Words to fit in the puzzle.
+	 * @param {String[]} words Words to fit in the puzzle.
 	 * @param {Object} options Options to use when filling the puzzle.
 	 * @param {Number} options.height Height of the puzzle.
 	 * @param {Number} options.width Width of the puzzle.
-	 * @returns {Array.<Array>} Returns either a valid puzzle with all of the words or null if a valid puzzle cannot be generated.
+	 * @returns {String[][]} Returns either a valid puzzle with all of the words or null if a valid puzzle cannot be generated.
 	 * @private
 	 * @memberof Wordprowl
 	 */
@@ -286,8 +286,9 @@ class Wordprowl {
 	 * @param {String[][]} puzzle Current state of the puzzle.
 	 * @param {Object} options Options to find the best locations to place the word in.
 	 * @param {String} word Word to fit in the puzzle.
-	 * @returns {{start:{x:Number, y:Number}, end:{x:Number, y:Number}, coordinates: [Number,Number][], word:String, overlap:Number, orientation:String}} Whether the word was successfully placed or not.
+	 * @returns {Object} Location if the word was successfully placed.
 	 * @memberof Wordprowl
+	 * @private
 	 */
 	placeWordInPuzzle(puzzle, options = this.options, word) {
 		// Find all best locations where the word will fit.
@@ -334,7 +335,7 @@ class Wordprowl {
 	 * @param {String[][]} puzzle Puzzle to determine locations in.
 	 * @param {Object} options Options used for generating the puzzle.
 	 * @param {String} word Word to fit into the puzzle.
-	 * @returns {{locations: {x: Number, y: Number}[], orientation: String, overlap: Number}[]} List of location objects which contain coordinates (x,y) indicating the start of the word, the orientation of the word, and the number of letters that overlapped with existing letter.
+	 * @returns {Object[]} List of location objects which contain coordinates (x,y) indicating the start of the word, the orientation of the word, and the number of letters that overlapped with existing letter.
 	 * @private
 	 * @memberof Wordprowl
 	 */
@@ -435,12 +436,12 @@ class Wordprowl {
 
 	/**
 	 * Places a word in the puzzle given a starting position and orientation.
-	 * @param {Array.<Array>} puzzle Current state of the puzzle.
-	 * @param {String} word Word to fit into the puzzle.
+	 * @param {String[][]} puzzle Puzzle to place words in.
+	 * @param {String} word Word to place in the puzzle.
 	 * @param {Number} x X coordinate of the starting position.
 	 * @param {Number} y Y coordinate of the starting position.
-	 * @param {string} orientation Orientation to use when computing the next squares.
-	 * @returns {Array.<Array.<{Number}>>} List of coordinates of the given word.
+	 * @param {String} orientation Orientation to use when computing the next squares.
+	 * @returns {[Number,Number][]} List of coordinates of the given word.
 	 * @private
 	 * @memberof Wordprowl
 	 */
@@ -453,10 +454,11 @@ class Wordprowl {
 
 	/**
 	 * Create a new puzzle with the given words.
-	 * @param {Array.<string>} words Words to place in the puzzle.
+	 * @param {String[]} words Words to place in the puzzle.
 	 * @param {Object} [options=this.options] Options for generating the puzzle.
-	 * @returns {Array.<Array.<String>>} Puzzle object.
+	 * @returns {String[][]} Puzzle object.
 	 * @memberof Wordprowl
+	 * @public
 	 */
 	newPuzzle(words, options = this.options) {
 		this._debug("Discarding previous puzzle and solution.");
