@@ -3,7 +3,8 @@ const socket = io.connect();
 function getNewPuzzle() {
 	hidePuzzle();
 	emptyPuzzle();
-	resetCanvas();
+	clearSelectionCanvas();
+	clearHighlightCanvas();
 	socket.emit("getNewPuzzle");
 }
 
@@ -28,75 +29,117 @@ function getMousePosition(canvas, event) {
 	};
 }
 
-function initCanvas({ size, wordManager }) {
-	const canvas = $("#puzzle__canvas").get(0);
-	const ctx = canvas.getContext("2d");
+function initSelection({ size, wordManager }) {
+	const $selectionCanvas = $("#puzzle__sl-canvas");
+	const selectionCanvas = $selectionCanvas.get(0);
+	const selectionCtx = selectionCanvas.getContext("2d");
+	
+	const $highlightCanvas = $("#puzzle__hl-canvas");
+	const highlightCanvas = $highlightCanvas.get(0);
+	const highlightCtx = highlightCanvas.getContext("2d");
 
-	canvas.width = $("#puzzle__grid").width();
-	canvas.height = $("#puzzle__grid").height();
+	selectionCanvas.width = $("#puzzle__grid").width();
+	selectionCanvas.height = $("#puzzle__grid").height();
 
-	const puzzleCellSide = canvas.width / size;
+	highlightCanvas.width = $("#puzzle__grid").width();
+	highlightCanvas.height = $("#puzzle__grid").height();
+
+	Object.assign(selectionCtx, {
+		lineWidth: Math.floor(300 / size),
+		lineCap: "round",
+		strokeStyle: "#ffffff",
+		globalAlpha: 0.2
+	});
+
+	Object.assign(highlightCtx, {
+		lineWidth: Math.floor(300 / size),
+		lineCap: "round",
+		strokeStyle: "#ff0000",
+		globalAlpha: 0.2
+	});
+
+	const puzzleCellSide = selectionCanvas.width / size;
 
 	let start = { x: 0, y: 0 }, end = { x: 0, y: 0 };
 
-	$("#puzzle__canvas").mousedown(event => {
-		let position = getMousePosition(canvas, event);
+	$selectionCanvas.mousedown(event => {
+		let position = getMousePosition(selectionCanvas, event);
 		start = {
 			x: Math.floor(position.x / puzzleCellSide),
 			y: Math.floor(position.y / puzzleCellSide)
 		};
 
-		$("#puzzle__canvas").mousemove(event => {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.beginPath();
+		$selectionCanvas.mousemove(event => {
+			selectionCtx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
+			selectionCtx.beginPath();
 
-			Object.assign(ctx, {
-				lineWidth: Math.floor(300 / size),
-				lineCap: "round",
-				strokeStyle: "#ffffff",
-				globalAlpha: 0.2
-			});
-
-			ctx.moveTo(
+			selectionCtx.moveTo(
 				start.x * puzzleCellSide + puzzleCellSide / 2,
 				start.y * puzzleCellSide + puzzleCellSide / 2
 			);
 
-			position = getMousePosition(canvas, event);
+			position = getMousePosition(selectionCanvas, event);
 
-			ctx.lineTo(
+			selectionCtx.lineTo(
 				puzzleCellSide * (Math.floor(position.x / puzzleCellSide) + 0.5),
 				puzzleCellSide * (Math.floor(position.y / puzzleCellSide) + 0.5)
 			);
 
-			ctx.stroke();
+			selectionCtx.stroke();
 		});
 	});
 
-	$("#puzzle__canvas").mouseup(event => {
-		const position = getMousePosition(canvas, event);
+	$selectionCanvas.mouseup(event => {
+		const position = getMousePosition(selectionCanvas, event);
 		end = {
 			x: Math.floor(position.x / puzzleCellSide),
 			y: Math.floor(position.y / puzzleCellSide)
 		};
 
 		if (start.x == end.x && start.y == end.y)
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			selectionCtx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
+		
+		entry = wordManager.tryCoords(start, end);
+		if (entry) {
+			console.log(entry);
+			highlightCtx.strokeStyle = entry.color;
+			highlightCtx.beginPath();
+			highlightCtx.moveTo(
+				start.x * puzzleCellSide + puzzleCellSide / 2,
+				start.y * puzzleCellSide + puzzleCellSide / 2
+			);
 
-		if (wordManager.tryCoords(start, end))
-			setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 1000);
+			highlightCtx.lineTo(
+				end.x * puzzleCellSide + puzzleCellSide / 2,
+				end.y * puzzleCellSide + puzzleCellSide / 2
+			);
+
+			highlightCtx.stroke();
+
+			selectionCtx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
+		}
 		else
-			setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 250);
+			setTimeout(() => selectionCtx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height), 250);
 
-		$("#puzzle__canvas").unbind("mousemove");
+		$selectionCanvas.unbind("mousemove");
 	});
 }
 
-function resetCanvas() {
-	const canvas = $("#puzzle__canvas").get(0);
-	const ctx = canvas.getContext("2d");
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	$("#puzzle__canvas").off();
+function clearSelectionCanvas() {
+	const $selectionCanvas = $("#puzzle__sl-canvas");
+	const selectionCanvas = $selectionCanvas.get(0);
+	selectionCanvas
+		.getContext("2d")
+		.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
+	$selectionCanvas.off();
+}
+
+function clearHighlightCanvas() {
+	const $highlightCanvas = $("#puzzle__hl-canvas");
+	const highlightCanvas = $highlightCanvas.get(0);
+	highlightCanvas
+		.getContext("2d")
+		.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
 }
 
 socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
@@ -186,18 +229,18 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 		}
 
 		tryCoords(start, end) {
-			const [entry] = this._words.filter(entry => entry.start.x === start.x && entry.start.y === start.y && entry.end.x === end.x && entry.end.y === end.y);
-			if (!entry) return false;
+			const [entry] = this._words.filter(entry => entry.start.x === start.x && entry.start.y === start.y && entry.end.x === end.x && entry.end.y === end.y && !entry.found);
+			if (!entry) return undefined;
 			this.markAsFound(entry.word);
 			this.updateList();
-			return true;
+			return entry;
 		}
 	}
 	const wordManagerInstance = new WordManager(solution.found);
 	wordManagerInstance.updateList();
 
 	showPuzzle();
-	initCanvas({ puzzle, size, category, wordManager: wordManagerInstance });
+	initSelection({ puzzle, size, category, wordManager: wordManagerInstance });
 });
 
 getNewPuzzle();
