@@ -217,7 +217,9 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 		}
 
 		get foundCoords() {
-			return this._words.filter(entry => entry.found).map(({ start, end, orientation }) => ({ start, end, orientation }));
+			return this._words.filter(entry => entry.found).map(
+				({ start, end, orientation }) => ({ start, end, orientation })
+			);
 		}
 
 		get notFound() {
@@ -225,11 +227,19 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 		}
 
 		get notFoundCoords() {
-			return this._words.filter(entry => !entry.found).map(({ start, end, orientation }) => ({ start, end, orientation }));
+			return this._words.filter(entry => !entry.found).map(
+				({ start, end, orientation }) => ({ start, end, orientation })
+			);
 		}
 
 		tryCoords(start, end) {
-			const [entry] = this._words.filter(entry => entry.start.x === start.x && entry.start.y === start.y && entry.end.x === end.x && entry.end.y === end.y && !entry.found);
+			const [entry] = this._words.filter(
+				entry => entry.start.x === start.x
+					&& entry.start.y === start.y
+					&& entry.end.x === end.x
+					&& entry.end.y === end.y
+					&& !entry.found
+			);
 			if (!entry) return undefined;
 			this.markAsFound(entry.word);
 			this.updateList();
