@@ -1,16 +1,25 @@
 {
   "name": "wordprowl",
-  "version": "1.0.0",
-  "description": "A program to generate a word search puzzle automatically",
-  "main": "index.js",
-  "dependencies": {
-    "datamuse": "^1.0.5",
-    "random-word": "^2.0.0"
-  },
-  "devDependencies": {},
+  "version": "2.0.0",
+  "description": "A library to generate word search puzzles.",
+  "main": "wordprowl.js",
   "scripts": {
-    "test": "node puzzlegen.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjt-rockx/wordprowl.git"
+  },
+  "keywords": [
+    "nodejs"
+  ],
   "author": "rjt-rockx",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rjt-rockx/wordprowl/issues"
+  },
+  "homepage": "https://github.com/rjt-rockx/wordprowl#readme",
+  "devDependencies": {
+    "eslint": "^5.11.1"
+  }
 }
