@@ -18,6 +18,7 @@ class Wordprowl {
 	 * @param {Boolean} [options.allowExtraBlanks=true] Allow additional blank spaces.
 	 * @param {Number} [options.maxAttempts=3] Number of attempts to generate a puzzle.
 	 * @param {Number} [options.maxGridGrowth=10] Number of times the grid can grow in size.
+	 * @param {Number} [options.allowedMissingWords=0] Number of words that can be skipped.
 	 * @param {Boolean} [options.preferOverlap=true] Prefer word overlap.
 	 * @param {Boolean} [options.debug=false] Log additional details in the console.
 	 * @returns {Wordprowl} A new Wordprowl instance with the given options.
@@ -41,16 +42,6 @@ class Wordprowl {
 	/**
 	 * Setup options and assign them to this.
 	 * @param {Object} [options={}] Options for generating puzzles.
-	 * @param {String} [options.letters] Letters to use to fill the remaining blanks.
-	 * @param {Number} [options.height=15] Height of the puzzle.
-	 * @param {Number} [options.width=15] Width of the puzzle.
-	 * @param {String[]} [options.orientations=allOrientations] Orientations to place words in.
-	 * @param {Boolean} [options.fillBlanks=true] Fill blank spaces.
-	 * @param {Boolean} [options.allowExtraBlanks=true] Allow additional blank spaces.
-	 * @param {Number} [options.maxAttempts=5] Number of attempts to generate a puzzle.
-	 * @param {Number} [options.maxGridGrowth=10] Number of times the grid can grow in size.
-	 * @param {Boolean} [options.preferOverlap=true] Prefer word overlap.
-	 * @param {Boolean} [options.debug=false] Log additional details in the console.
 	 * @memberof Wordprowl
 	 * @private
 	 */
@@ -92,6 +83,14 @@ class Wordprowl {
 		else {
 			this._debug("Invalid maxGridGrowth specified; Using 10.");
 			this.options.maxGridGrowth = 10;
+		}
+
+		// Check allowedMissingWords.
+		if (typeof options.allowedMissingWords === "number")
+			this.options.allowedMissingWords = options.allowedMissingWords;
+		else {
+			this._debug("Invalid allowedMissingWords specified; Using 0.");
+			this.options.allowedMissingWords = 0;
 		}
 
 		// Assign the rest of the options as Booleans.
