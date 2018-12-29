@@ -1,15 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700');
 
 :root {
-    --body-background-color: #050505;
-    --body-color: rgba(255, 255, 255, 0.57);
+    --text-color-primary: rgba(255, 255, 255, 0.87);
+    --text-color-secondary: rgba(255, 255, 255, 0.54);
 
-    --puzzle-background-color: #111111;
-    --puzzle-color: rgba(255, 255, 255, 0.57);
-
-    --puzzle__header-background-color: #222222;
-
-    --puzzle__title-color: rgba(255, 255, 255, 0.87)
+    --body-background: #050505;
+    --puzzle-background: #111111;
+    --puzzle__header-background: #222222;
 }
 
 body {
@@ -17,8 +14,8 @@ body {
     padding: 0;
 
 
-    background-color: var(--body-background-color);
-    color: var(--body-color);
+    background-color: var(--body-background);
+    color: var(--text-color-secondary);
 
     font-family: 'Ubuntu Mono', monospace;
 }
@@ -35,8 +32,8 @@ body {
 .puzzle {
     margin: 0;
 
-    background-color: var(--puzzle-background-color);
-    color: var(--puzzle-color);
+    background-color: var(--puzzle-background);
+    color: var(--text-color-secondary);
 
     border-radius: 8px;
 
@@ -45,14 +42,14 @@ body {
 
 .puzzle__header {
     display: flex;
-    background-color: var(--puzzle__header-background-color);
+    background-color: var(--puzzle__header-background);
     justify-content: space-between;
 }
 
 .puzzle__title {
     padding: 0 16px;
 
-    color: var(--puzzle__title-color);
+    color: var(--text-color-primary);
 
     line-height: 48px;
     text-transform: capitalize;
@@ -200,7 +197,7 @@ body {
     width: 5px;
     height: 14px;
     border-radius: 20%;
-    background: rgba(255, 255, 255, 0.57);
+    background: var(--text-color-secondary);
 }
 
 .lds-spinner div:nth-child(1) {
