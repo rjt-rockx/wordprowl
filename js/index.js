@@ -157,7 +157,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 
 	$puzzleLoadingSpinner.removeClass("puzzle__loading-spinner--hidden");
 	$puzzleTitle.html(`<h3>${category.toLowerCase()} (${size}x${size})</h3>`);
-	document.documentElement.style.setProperty("--puzzle__grid-size", size);
+	$puzzleGrid.css("grid-template-columns", `repeat(${size}, 1fr`);
 
 	for (const row of puzzle) {
 		for (const letter of row) {

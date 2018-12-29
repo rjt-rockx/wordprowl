@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700');
 
 :root {
-    --puzzle__grid-size: 10;
     --body-background-color: #050505;
     --body-color: rgba(255, 255, 255, 0.57);
 
@@ -140,7 +139,6 @@ body {
 
 .puzzle__grid {
     display: grid;
-    grid-template-columns: repeat(var(--puzzle__grid-size), 1fr);
 
     position: absolute;
     top: 0;
