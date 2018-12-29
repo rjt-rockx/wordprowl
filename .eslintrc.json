@@ -1,7 +1,5 @@
 {
     "env": {
-        "browser": true,
-        "commonjs": true,
         "es6": true,
         "node": true
     },
@@ -10,25 +8,41 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "linebreak-style": [
+        "no-console": "off",
+        "no-constant-condition": "off",
+        "indent": [
             "error",
-            "unix"
+            "tab",
+            {
+                "SwitchCase": 1,
+                "ObjectExpression": 1
+            }
         ],
+        "no-unused-vars": "off",
+        "no-empty-pattern": "off",
         "quotes": [
             "error",
             "double"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
         ],
         "semi": [
             "error",
             "always"
         ],
-        "no-console": "off",
-        "no-unused-vars": "off",
-        "no-undef": "off",
-        "no-empty": "off",
-        "indent": [
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "no-return-await": "warn",
+        "no-unneeded-ternary": "warn",
+        "object-shorthand": [
             "warn",
-            "tab"
-        ]
+            "always"
+        ],
+        "prefer-const": "warn",
+        "no-empty": "off"
     }
 }
