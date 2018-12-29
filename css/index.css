@@ -16,47 +16,46 @@ body {
     margin: 0;
     padding: 0;
 
-    font-family: 'Ubuntu Mono', monospace;
 
     background-color: var(--body-background-color);
     color: var(--body-color);
+
+    font-family: 'Ubuntu Mono', monospace;
 }
 
 #wrapper {
     box-sizing: border-box;
+
     width: 100%;
     max-width: 480px;
-
-    margin: none;
-    margin-left: auto;
-    margin-right: auto;
-
+    margin: 0 auto;
     padding: 0 16px;
 }
 
 .puzzle {
+    margin: 0;
+
     background-color: var(--puzzle-background-color);
     color: var(--puzzle-color);
+
     border-radius: 8px;
 
     overflow: hidden;
-
-    margin: 0 0;
 }
 
 .puzzle__header {
     display: flex;
-    justify-content: space-between;
     background-color: var(--puzzle__header-background-color);
+    justify-content: space-between;
 }
 
 .puzzle__title {
     padding: 0 16px;
-    line-height: 48px;
-
-    text-transform: capitalize;
 
     color: var(--puzzle__title-color);
+
+    line-height: 48px;
+    text-transform: capitalize;
 }
 
 .puzzle__title h3 {
@@ -65,25 +64,21 @@ body {
 
 .button {
     display: inline-block;
-    height: 32px;
 
+    height: 32px;
     margin: 8px;
+    padding: 0 16px;
 
     border: none;
     border-radius: 4px;
 
-    padding: 0 16px;
-
-    font-family: inherit;
     font-weight: bold;
 
+    user-select: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-
-
     -moz-user-select: none;
     -webkit-user-select: none;
-    user-select: none;
 }
 
 .button:hover {
@@ -111,14 +106,6 @@ body {
     background-color: #043769;
 }
 
-.puzzle__canvas-container {
-    position: relative;
-
-    width: 100%;
-
-    padding-top: 100%;
-}
-
 .puzzle__canvas {
     position: absolute;
     top: 0;
@@ -132,14 +119,11 @@ body {
     position: relative;
 
     width: 100%;
-
     padding-top: 100%;
-
 }
 
 .puzzle__grid {
     display: grid;
-
     position: absolute;
     top: 0;
     left: 0;
@@ -149,9 +133,9 @@ body {
 
     pointer-events: none;
 
+    user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
-    user-select: none;
 }
 
 .puzzle__grid-cell {
@@ -167,16 +151,16 @@ body {
 }
 
 .word__list {
+    padding: 0;
+
     list-style-type: none;
     columns: 2;
     -webkit-columns: 2;
     -moz-columns: 2;
 
-    padding-left: 0;
 }
 
 .word__list li {
-
     text-align: center;
     text-transform: capitalize;
 }
@@ -253,6 +237,7 @@ body {
     transform: rotate(180deg);
     animation-delay: -0.5s;
 }
+
 .lds-spinner div:nth-child(8) {
     transform: rotate(210deg);
     animation-delay: -0.4s;
@@ -262,18 +247,22 @@ body {
     transform: rotate(240deg);
     animation-delay: -0.3s;
 }
+
 .lds-spinner div:nth-child(10) {
     transform: rotate(270deg);
     animation-delay: -0.2s;
 }
+
 .lds-spinner div:nth-child(11) {
     transform: rotate(300deg);
     animation-delay: -0.1s;
 }
+
 .lds-spinner div:nth-child(12) {
     transform: rotate(330deg);
     animation-delay: 0s;
 }
+
 @keyframes lds-spinner {
     0% {
         opacity: 1;
