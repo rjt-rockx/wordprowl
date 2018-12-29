@@ -4,10 +4,10 @@ const allOrientations = ["horizontal", "horizontalBack", "vertical", "verticalUp
 // The definition of the orientation, calculates the next square given a
 // starting square (x,y) and distance (i) from that square.
 const orientations = {
-	horizontal: (x, y, i) => ({ x: x + i, y: y }),
-	horizontalBack: (x, y, i) => ({ x: x - i, y: y }),
-	vertical: (x, y, i) => ({ x: x, y: y + i }),
-	verticalUp: (x, y, i) => ({ x: x, y: y - i }),
+	horizontal: (x, y, i) => ({ x: x + i, y }),
+	horizontalBack: (x, y, i) => ({ x: x - i, y }),
+	vertical: (x, y, i) => ({ x, y: y + i }),
+	verticalUp: (x, y, i) => ({ x, y: y - i }),
 	diagonal: (x, y, i) => ({ x: x + i, y: y + i }),
 	diagonalBack: (x, y, i) => ({ x: x - i, y: y + i }),
 	diagonalUp: (x, y, i) => ({ x: x + i, y: y - i }),
@@ -35,7 +35,7 @@ const checkOrientations = {
 // This greatly reduces the number of squares that must be checked. Returning {x: x+1, y: y} will always work but will not be optimal.
 const skipOrientations = {
 	horizontal: (x, y, l) => ({ x: 0, y: y + 1 }),
-	horizontalBack: (x, y, l) => ({ x: l - 1, y: y }),
+	horizontalBack: (x, y, l) => ({ x: l - 1, y }),
 	vertical: (x, y, l) => ({ x: 0, y: y + 100 }),
 	verticalUp: (x, y, l) => ({ x: 0, y: l - 1 }),
 	diagonal: (x, y, l) => ({ x: 0, y: y + 1 }),
@@ -62,23 +62,19 @@ const skipOrientations = {
  */
 const fillPuzzle = function (words, options) {
 
-	let puzzle = [],
-		i, j, len;
+	let puzzle = [];
 
 	// initialize the puzzle with blanks
-	for (i = 0; i < options.height; i++) {
+	for (let i = 0; i < options.height; i++) {
 		puzzle.push([]);
-		for (j = 0; j < options.width; j++) {
+		for (let j = 0; j < options.width; j++)
 			puzzle[i].push("");
-		}
 	}
 
 	// add each word into the puzzle one at a time
 	for (const word of words)
-		if (!placeWordInPuzzle(puzzle, options, word))
-			// if a word didn't fit in the puzzle, give up
-			return null;
-
+		// if a word didn't fit in the puzzle, give up
+		if (!placeWordInPuzzle(puzzle, options, word)) return;
 	// return the puzzle
 	return puzzle;
 };
@@ -95,16 +91,13 @@ const fillPuzzle = function (words, options) {
  * @param {String} word: The word to fit into the puzzle.
  */
 const placeWordInPuzzle = function (puzzle, options, word) {
-
 	// find all of the best locations where this word would fit
 	const locations = findBestLocations(puzzle, options, word);
-	if (locations.length === 0)
-		return false;
-
+	if (locations.length === 0) return;
 	// select a location at random and place the word there
-	const { x, y, orientation } = locations[Math.floor(Math.random() * locations.length)];
-	placeWord(puzzle, word, x, y, orientations[orientation]);
-	return true;
+	const location = locations[Math.floor(Math.random() * locations.length)];
+	placeWord(puzzle, word, location.x, location.y, orientations[location.orientation]);
+	return location || {};
 };
 
 /**
@@ -122,41 +115,33 @@ const placeWordInPuzzle = function (puzzle, options, word) {
  */
 const findBestLocations = function (puzzle, options, word) {
 
-	let locations = [],
-		{ height, width } = options,
-		wordLength = word.length,
-		maxOverlap = 0; // we'll start looking at overlap = 0
+	const locations = [],
+		{ height, width } = options;
+	let maxOverlap = 0; // we'll start looking at overlap = 0
 
 	// loop through all of the possible orientations at this position
 	for (let k = 0, len = options.orientations.length; k < len; k++) {
 
-		let orientation = options.orientations[k],
+		const orientation = options.orientations[k],
 			check = checkOrientations[orientation],
 			next = orientations[orientation],
-			skipTo = skipOrientations[orientation],
-			x = 0,
-			y = 0;
+			skipTo = skipOrientations[orientation];
+		let x = 0, y = 0;
 
 		// loop through every position on the board
 		while (y < height) {
 
 			// see if this orientation is even possible at this location
-			if (check(x, y, height, width, wordLength)) {
+			if (check(x, y, height, width, word.length)) {
 
 				// determine if the word fits at the current position
-				let overlap = calcOverlap(word, puzzle, x, y, next);
+				const overlap = calcOverlap(word, puzzle, x, y, next);
 
 				// if the overlap was bigger than previous overlaps that we've seen
 				if (overlap >= maxOverlap || (!options.preferOverlap && overlap > -1)) {
 					maxOverlap = overlap;
-					locations.push({
-						x: x,
-						y: y,
-						orientation: orientation,
-						overlap: overlap
-					});
+					locations.push({ x, y, orientation, overlap });
 				}
-
 				x++;
 				if (x >= width) {
 					x = 0;
@@ -166,7 +151,7 @@ const findBestLocations = function (puzzle, options, word) {
 				// if current cell is invalid, then skip to the next cell where
 				// this orientation is possible. this greatly reduces the number
 				// of checks that we have to do overall
-				let nextPossible = skipTo(x, y, wordLength);
+				const nextPossible = skipTo(x, y, word.length);
 				x = nextPossible.x;
 				y = nextPossible.y;
 			}
@@ -198,7 +183,7 @@ const calcOverlap = function (word, puzzle, x, y, fnGetSquare) {
 	// traverse the squares to determine if the word fits
 	for (let i = 0, len = word.length; i < len; i++) {
 
-		let next = fnGetSquare(x, y, i),
+		const next = fnGetSquare(x, y, i),
 			square = puzzle[next.y][next.x];
 
 		// if the puzzle square already contains the letter we
@@ -239,8 +224,8 @@ const pruneLocations = (locations, overlap) => locations.filter(location => loca
  * @param {function} fnGetSquare: Function that returns the next square
  */
 const placeWord = function (puzzle, word, x, y, fnGetSquare) {
-	for (let i = 0, len = word.length; i < len; i++) {
-		let next = fnGetSquare(x, y, i);
+	for (let i = 0; i < word.length; i++) {
+		const next = fnGetSquare(x, y, i);
 		puzzle[next.y][next.x] = word[i];
 	}
 };
@@ -262,17 +247,17 @@ const placeWord = function (puzzle, word, x, y, fnGetSquare) {
  */
 const newPuzzle = function (words, settings) {
 	if (!words.length) throw new Error("Zero words provided");
-	let wordList, puzzle, attempts = 0,
-		gridGrowths = 0,
-		opts = settings || {};
+	let puzzle, attempts = 0,
+		gridGrowths = 0;
+	const opts = settings || {};
 
 	// copy and sort the words by length, inserting words into the puzzle
 	// from longest to shortest works out the best
-	wordList = words.slice(0).sort();
+	const wordList = words.slice(0).sort((a, b) => b.length - a.length);
 
 	// initialize the options
-	let maxWordLength = wordList[0].length;
-	let options = {
+	const maxWordLength = wordList[0].length;
+	const options = {
 		height: opts.height || maxWordLength,
 		width: opts.width || maxWordLength,
 		orientations: opts.orientations || allOrientations,
@@ -334,13 +319,13 @@ const newPuzzleLax = function (words, opts) {
 		return newPuzzle(words, opts);
 	} catch (e) {
 		if (!opts.allowedMissingWords) throw e;
-		let opts = Object.assign({}, opts); // shallow copy
+		const opts = Object.assign({}, opts); // shallow copy
 		opts.allowedMissingWords--;
 		for (let i = 0; i < words.length; i++) {
-			let wordList = words.slice(0);
+			const wordList = words.slice(0);
 			wordList.splice(i, 1);
 			try {
-				let puzzle = newPuzzleLax(wordList, opts);
+				const puzzle = newPuzzleLax(wordList, opts);
 				// console.log(`Solution found without word "${words[i]}"`);
 				return puzzle;
 			} catch (e) { } // continue if error
@@ -358,7 +343,7 @@ const newPuzzleLax = function (words, opts) {
 const fillBlanks = function ({ puzzle, extraLetterGenerator }) {
 	let extraLettersCount = 0;
 	for (let i = 0, height = puzzle.length; i < height; i++) {
-		let row = puzzle[i];
+		const row = puzzle[i];
 		for (let j = 0, width = row.length; j < width; j++) {
 			if (!puzzle[i][j]) {
 				puzzle[i][j] = extraLetterGenerator();
@@ -385,16 +370,16 @@ const fillBlanks = function ({ puzzle, extraLetterGenerator }) {
  * @param {[String]} words The list of words to find
  */
 const solvePuzzle = function (puzzle, words) {
-	let options = {
+	const options = {
 		height: puzzle.length,
 		width: puzzle[0].length,
 		orientations: allOrientations,
 		preferOverlap: true
 	};
-	let found = [], notFound = [];
+	const found = [], notFound = [];
 
-	for (let word of words) {
-		let [location] = findBestLocations(puzzle, options, word);
+	for (const word of words) {
+		const [location] = findBestLocations(puzzle, options, word);
 		if (location && location.overlap === word.length) {
 			location.word = word;
 			found.push(location);
