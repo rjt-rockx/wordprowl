@@ -1,7 +1,11 @@
 {
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "jquery": true
+    },
+    "globals": {
+        "io": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -43,6 +47,7 @@
             "always"
         ],
         "prefer-const": "warn",
-        "no-empty": "off"
+        "no-empty": "off",
+        "space-infix-ops": "warn"
     }
 }
