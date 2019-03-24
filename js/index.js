@@ -99,7 +99,7 @@ function initSelection({ size, wordManager }) {
 		if (start.x == end.x && start.y == end.y)
 			selectionCtx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
 		
-		entry = wordManager.tryCoords(start, end);
+		let entry = wordManager.tryCoords(start, end);
 		if (entry) {
 			console.log(entry);
 			highlightCtx.strokeStyle = entry.color;
