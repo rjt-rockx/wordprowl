@@ -8,8 +8,8 @@ app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
 app.get("/", (req, res) => res.sendFile(__dirname + "/html/index.html"));
 
-let makePuzzle = async function () {
-	let data = await puzzlegen.createPuzzle();
+const makePuzzle = async function () {
+	const data = await puzzlegen.createPuzzle();
 	io.emit("createPuzzle", data);
 };
 
