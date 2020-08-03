@@ -33,7 +33,7 @@ function initSelection({ size, wordManager }) {
 	const $selectionCanvas = $("#puzzle__sl-canvas");
 	const selectionCanvas = $selectionCanvas.get(0);
 	const selectionCtx = selectionCanvas.getContext("2d");
-	
+
 	const $highlightCanvas = $("#puzzle__hl-canvas");
 	const highlightCanvas = $highlightCanvas.get(0);
 	const highlightCtx = highlightCanvas.getContext("2d");
@@ -98,7 +98,7 @@ function initSelection({ size, wordManager }) {
 
 		if (start.x == end.x && start.y == end.y)
 			selectionCtx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
-		
+
 		let entry = wordManager.tryCoords(start, end);
 		if (entry) {
 			console.log(entry);
@@ -163,7 +163,7 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 		for (const letter of row) {
 			$puzzleGrid.append(`
 				<div class="puzzle__grid-cell">
-					<span>${ letter }</span>
+					<span>${letter}</span>
 				</div>
 			`);
 		}
@@ -184,15 +184,15 @@ socket.on("createPuzzle", ({ puzzle, size, category, solution }) => {
 		updateList() {
 			$wordList.html("");
 			for (const entry of this._words) {
-				if(entry.found) {
+				if (entry.found) {
 					$wordList.append(`
-						<li style="color: ${ entry.color };">
-							<s>${ entry.word.toLowerCase() }</s>
+						<li style="color: ${entry.color};">
+							<s>${entry.word.toLowerCase()}</s>
 						</li>
 					`);
 				}
 				else {
-					$wordList.append(`<li>${ entry.word.toLowerCase() }</li>`);
+					$wordList.append(`<li>${entry.word.toLowerCase()}</li>`);
 				}
 			}
 		}

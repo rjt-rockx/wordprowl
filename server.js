@@ -13,6 +13,6 @@ const makePuzzle = async function () {
 	io.emit("createPuzzle", data);
 };
 
-io.on("connection", (client) => client.on("getNewPuzzle", makePuzzle));
+io.on("connection", client => client.on("getNewPuzzle", makePuzzle));
 
 server.listen(4280, console.log("Wordprowl\nListening on port 4280"));

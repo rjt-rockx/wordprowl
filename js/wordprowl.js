@@ -62,7 +62,7 @@ const skipOrientations = {
  */
 const fillPuzzle = function (words, options) {
 
-	let puzzle = [];
+	const puzzle = [];
 
 	// initialize the puzzle with blanks
 	for (let i = 0; i < options.height; i++) {
@@ -328,7 +328,9 @@ const newPuzzleLax = function (words, opts) {
 				const puzzle = newPuzzleLax(wordList, opts);
 				// console.log(`Solution found without word "${words[i]}"`);
 				return puzzle;
-			} catch (e) { } // continue if error
+			} catch (e) {
+				continue;
+			} // continue if error
 		}
 		throw e;
 	}
