@@ -1,7 +1,7 @@
 {
     "name": "wordprowl",
-    "version": "1.0.0",
-    "description": "A program to generate a word search puzzle automatically",
+    "version": "1.1.0",
+    "description": "A simple word-searching game with endless new puzzles.",
     "main": "index.js",
     "dependencies": {
         "datamuse": "^1.0.5",
