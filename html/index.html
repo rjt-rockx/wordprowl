@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>Wordprowl</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="title" content="Wordprowl">
+        <meta name="description" content="A simple word-searching game with endless new puzzles.">
+        <meta name="keywords"
+            content="wordsearch,wordsleuth,words,word,puzzle,wordprowl,wordpuzzle,search,game,wordgame,endless">
+        <meta name="robots" content="index, nofollow">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="language" content="English">
 
         <link href="../wordprowl/css/index.css" rel="stylesheet">
 
         <script src="/socket.io/socket.io.js"></script>
     </head>
+
     <body>
         <div id="wrapper">
             <div class="header">
-                <div class="header__title"><h1>Wordprowl</h1></div>
+                <div class="header__title">
+                    <h1>Wordprowl</h1>
+                </div>
             </div>
             <div class="puzzle">
                 <div class="puzzle__header">
-                    <div id= "puzzle__title" class="puzzle__title"></div>
+                    <div id="puzzle__title" class="puzzle__title"></div>
                     <button class="button button--new-puzzle" onclick="getNewPuzzle()">
                         New Puzzle
                     </button>
@@ -47,7 +58,7 @@
             <ul id="word__list" class="word__list">
             </ul>
         </div>
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="../wordprowl/js/index.js"></script>
     </body>
 
