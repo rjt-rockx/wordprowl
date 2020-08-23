@@ -1,18 +1,41 @@
 const express = require("express");
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
 const puzzlegen = require("./js/puzzlegen.js");
+const port = 4280;
 
-app.use("/css", express.static(__dirname + "/css"));
-app.use("/js", express.static(__dirname + "/js"));
-app.get("/", (req, res) => res.sendFile(__dirname + "/html/index.html"));
+app.use("/wordprowl/css", express.static(__dirname + "/css"));
+app.use("/wordprowl/js", express.static(__dirname + "/js"));
+app.get("/wordprowl/", (_, res) => res.sendFile(__dirname + "/html/index.html"));
 
-const makePuzzle = async function () {
-	const data = await puzzlegen.createPuzzle();
-	io.emit("createPuzzle", data);
-};
+const server = app.listen(port, console.log(`Wordprowl listening on port ${port}`));
 
-io.on("connection", client => client.on("getNewPuzzle", makePuzzle));
+class puzzleBuffer {
+	constructor(socketServer) {
+		this.socketServer = socketServer;
+		this.clients = new Map();
+		this.timeout = 600;
+		this.socketServer.on("connect", socket => {
+			this.clients.set(socket.id, { puzzle: puzzlegen.createPuzzle(), lastUpdated: Date.now() });
+			socket.on("getNewPuzzle", () => this.servePuzzle(socket.id));
+		});
+		setInterval(() => this.purgeOldClients(this.timeout), 60);
+	}
 
-server.listen(4280, console.log("Wordprowl\nListening on port 4280"));
+	async servePuzzle(id) {
+		this.socketServer.to(id).emit("createPuzzle", await this.clients.get(id).puzzle);
+		const data = { puzzle: puzzlegen.createPuzzle(), lastUpdated: Date.now() };
+		this.clients.set(id, data);
+		return { id, ...data };
+	}
+
+	purgeOldClients(seconds = 600) {
+		const ms = seconds * 1000;
+		const current = Date.now();
+		for (const [id, client] of this.clients) {
+			if (client.lastUpdated < (current - ms))
+				this.clients.delete(id);
+		}
+	}
+}
+
+new puzzleBuffer(require("socket.io")(server));
