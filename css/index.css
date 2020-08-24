@@ -13,7 +13,6 @@ body {
     margin: 0;
     padding: 0;
 
-
     background-color: var(--body-background);
     color: var(--text-color-secondary);
 
@@ -68,8 +67,6 @@ body {
 
     border: none;
     border-radius: 4px;
-
-    font-weight: bold;
 
     user-select: none;
     -webkit-appearance: none;
@@ -137,7 +134,7 @@ body {
 
 .puzzle__grid-cell {
     position: relative;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .puzzle__grid-cell span {
@@ -150,6 +147,7 @@ body {
 .word__list {
     padding: 0;
 
+    font-size: 18px;
     list-style-type: none;
     columns: 2;
     -webkit-columns: 2;
