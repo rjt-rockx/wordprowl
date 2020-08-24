@@ -3,10 +3,10 @@ const app = express();
 const puzzlegen = require("./js/puzzlegen.js");
 const port = 4280;
 
-app.use("/css", express.static(__dirname + "/css"));
-app.use("/js", express.static(__dirname + "/js"));
-app.use("/favicons", express.static(__dirname + "/assets/favicons"));
-app.get("/", (_, res) => res.sendFile(__dirname + "/html/index.html"));
+app.use("/wordprowl/css", express.static(__dirname + "/css"));
+app.use("/wordprowl/js", express.static(__dirname + "/js"));
+app.use("/wordprowl/favicons", express.static(__dirname + "/assets/favicons"));
+app.get("/wordprowl/", (_, res) => res.sendFile(__dirname + "/html/index.html"));
 
 const server = app.listen(port, console.log(`Wordprowl listening on port ${port}`));
 
@@ -39,4 +39,4 @@ class puzzleBuffer {
 	}
 }
 
-new puzzleBuffer(require("socket.io")(server, { path: "/socket" }));
+new puzzleBuffer(require("socket.io")(server, { path: "/wordprowl/socket"}));
