@@ -39,4 +39,4 @@ class puzzleBuffer {
 	}
 }
 
-new puzzleBuffer(require("socket.io")(server));
+new puzzleBuffer(require("socket.io")(server, { path: "/wordprowl/socket"}));

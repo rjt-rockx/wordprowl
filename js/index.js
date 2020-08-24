@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const socket = io.connect();
+const socket = io(window.location.origin, { path: "/wordprowl/socket" }).connect();
 
 function getNewPuzzle() {
 	hidePuzzle();
